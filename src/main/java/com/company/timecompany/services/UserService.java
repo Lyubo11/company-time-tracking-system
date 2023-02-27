@@ -1,13 +1,17 @@
 package com.company.timecompany.services;
 
 import com.company.timecompany.entities.User;
+import com.company.timecompany.exceptions.UserNotFoundException;
 import com.company.timecompany.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired
@@ -17,4 +21,22 @@ public class UserService {
         return (List<User>) userRepository.findAll();
     }
 
+    public User getUserId(Integer id) throws UserNotFoundException {
+        try {
+            return userRepository.findById(id).get();
+        } catch (NoSuchElementException ex) {
+            throw new UserNotFoundException("Could not find any user wid ID: " + id);
+        }
+    }
+    public void deleteUser(Integer id) throws UserNotFoundException {
+        Long countById = userRepository.countById(id);
+        if (countById == null || countById == 0) {
+            throw new UserNotFoundException("Could not find any user with ID: " + id);
+        }
+        userRepository.deleteById(id);
+    }
+
+    public void updateUserEnabledStatus(Integer id, boolean enabled) {
+        userRepository.updateEnabledStatus(id, enabled);
+    }
 }
