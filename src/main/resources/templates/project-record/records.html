@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Project records</title>
+    <link rel="stylesheet" th:href="@{/fontawesome/all.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<body>
+<div>
+    <h1>List of Project records</h1>
+</div>
+<div class="alert alert-success text-center" th:if="${message!=null}">
+    [[${message}]]
+</div>
+<div class="position-relative m-2 mx-4 me-auto">
+    <form th:action="@{/users/records}" method="get">
+        <input type="text" name="keyword" th:value="${keyword}" placeholder="Search by keyword..."/>
+        <input type="number" name="weekNumber" th:value="${weekNumber}"
+               placeholder="Filter by week number..."/>
+        <button type="submit">Search</button>
+    </form>
+</div>
+<div>
+    <table class="table table-responsive-xL">
+        <thead class="table-dark">
+        <tr>
+            <th>Project</th>
+            <th>Summary</th>
+            <th>status</th>
+            <th>Date</th>
+            <th>Work duration</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="record:${listRecords}">
+            <td>[[${record.project}]]</td>
+            <td>[[${record.summary}]]</td>
+            <td>[[${record.status}]]</td>
+            <td>[[${record.date}]]</td>
+            <td>[[${record.hoursWorked}]]</td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

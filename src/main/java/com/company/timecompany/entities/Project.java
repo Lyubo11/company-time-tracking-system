@@ -1,6 +1,8 @@
 package com.company.timecompany.entities;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Project {
@@ -10,8 +12,8 @@ public class Project {
 
     private String projectName;
     private String description;
-    @OneToOne(mappedBy = "project")
-    private ProjectRecord projectRecord;
+    @OneToMany(mappedBy = "project")
+    private List<ProjectRecord> projectRecords = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
@@ -43,13 +45,13 @@ public class Project {
         this.description = description;
     }
 
-    public ProjectRecord getProjectRecord() {
-        return projectRecord;
-    }
+//    public ProjectRecord getProjectRecord() {
+//        return projectRecord;
+//    }
 
-    public void setProjectRecord(ProjectRecord projectRecord) {
-        this.projectRecord = projectRecord;
-    }
+//    public void setProjectRecord(ProjectRecord projectRecord) {
+//        this.projectRecord = projectRecord;
+//    }
 
     public Customer getCustomer() {
         return customer;
@@ -73,5 +75,20 @@ public class Project {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public List<ProjectRecord> getProjectRecords() {
+        return projectRecords;
+    }
+
+    @Override
+    public String toString() {
+        return this.id.toString();
+    }
+
+    public void setProjectRecords(List<ProjectRecord> projectRecords) {
+        this.projectRecords = projectRecords;
+
+
     }
 }
