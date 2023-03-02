@@ -4,6 +4,7 @@ import com.company.timecompany.entities.User;
 import com.company.timecompany.exceptions.UserNotFoundException;
 import com.company.timecompany.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -13,12 +14,20 @@ import java.util.NoSuchElementException;
 @Service
 @Transactional
 public class UserService {
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private UserRepository userRepository;
 
     public List<User> listAllUsers() {
         return (List<User>) userRepository.findAll();
+    }
+    public void save(User user){
+        userRepository.save(user);
+    }
+    private void setPasswordEncoder(User user){
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
     }
 
     public User getUserId(Integer id) throws UserNotFoundException {

@@ -54,7 +54,8 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("/users/new");
         } else {
-            userRepository.save(user);
+            userService.save(user);
+//            userRepository.save(user);
             redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
             return new ModelAndView("redirect:/users");
         }
