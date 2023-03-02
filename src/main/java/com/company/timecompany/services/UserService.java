@@ -11,6 +11,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+
 @Service
 @Transactional
 public class UserService {
@@ -22,10 +23,26 @@ public class UserService {
     public List<User> listAllUsers() {
         return (List<User>) userRepository.findAll();
     }
-    public void save(User user){
-        userRepository.save(user);
+
+    public User save(User user) {
+        boolean isUpdatingUser = (user.getId() != null);
+
+        if (isUpdatingUser) {
+            User existingUser = userRepository.findById(user.getId()).get();
+            if (user.getPassword().isEmpty()) {
+                user.setPassword(existingUser.getPassword());
+            }
+        }
+        encodePassword(user);
+        return userRepository.save(user);
     }
-    private void setPasswordEncoder(User user){
+
+    private void encodePassword(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+    }
+
+    private void setPasswordEncoder(User user) {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
     }
@@ -37,6 +54,7 @@ public class UserService {
             throw new UserNotFoundException("Could not find any user wid ID: " + id);
         }
     }
+
     public void deleteUser(Integer id) throws UserNotFoundException {
         Long countById = userRepository.countById(id);
         if (countById == null || countById == 0) {
