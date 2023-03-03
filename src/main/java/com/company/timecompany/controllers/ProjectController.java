@@ -55,20 +55,6 @@ public class ProjectController {
         }
     }
 
-    @GetMapping("/projects/create")
-    private String createProject(Project project) {
-        return "project/project-form";
-    }
-
-    @PostMapping("/projects/submit")
-    private String saveProject(@Valid Project project, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "/projects/create";
-        }
-        projectRepository.save(project);
-        return "redirect:/projects";
-    }
-
     @GetMapping("/projects/edit/{projectId}")
     private String editProject(@PathVariable(name = "projectId") Integer projectId, Model model) {
         model.addAttribute("project", projectRepository.findById(projectId));

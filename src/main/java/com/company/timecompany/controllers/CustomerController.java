@@ -48,20 +48,6 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/customers/create")
-    private String createCustomer(Customer customer) {
-        return "customer/customer-form";
-    }
-
-    @PostMapping("/customers/submit")
-    private String saveCustomer(@Valid Customer customer, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "/customers/create";
-        }
-        customerRepository.save(customer);
-        return "redirect:/customers";
-    }
-
     @GetMapping("/customers/edit/{customerId}")
     private String editCustomer(@PathVariable(name = "customerId") Integer customerId, Model model) {
         model.addAttribute("customer", customerRepository.findById(customerId));
