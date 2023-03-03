@@ -7,7 +7,6 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String projectName;
     private String description;
     @OneToOne(mappedBy = "project")

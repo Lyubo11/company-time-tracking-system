@@ -11,10 +11,11 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    private String country;
     @OneToMany(mappedBy = "customer")
     private List<Project> projects = new ArrayList<>();
 
-    private Date ContractExpiration;
+    private Date contractExpiration;
 
     public Integer getId() {
         return id;
@@ -32,6 +33,14 @@ public class Customer {
         this.name = name;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public List<Project> getProjects() {
         return projects;
     }
@@ -41,10 +50,10 @@ public class Customer {
     }
 
     public Date getContractExpiration() {
-        return ContractExpiration;
+        return contractExpiration;
     }
 
     public void setContractExpiration(Date contractExpiration) {
-        ContractExpiration = contractExpiration;
+        this.contractExpiration = contractExpiration;
     }
 }
