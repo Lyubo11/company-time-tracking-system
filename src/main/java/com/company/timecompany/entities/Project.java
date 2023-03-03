@@ -5,21 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Project {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    public class Project {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Integer id;
 
-    private String projectName;
-    private String description;
-    @OneToMany(mappedBy = "project")
-    private List<ProjectRecord> projectRecords = new ArrayList<>();
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+        private String projectName;
+        private String description;
+        @OneToMany(mappedBy = "project")
+        private List<ProjectRecord> projectRecords = new ArrayList<>();
+        @ManyToOne
+        @JoinColumn(name = "customer_id")
+        private Customer customer;
 
-    private String startDate;
-    private String endDate;
+        private String startDate;
+        private String endDate;
 
     public Integer getId() {
         return id;
@@ -44,14 +44,6 @@ public class Project {
     public void setDescription(String description) {
         this.description = description;
     }
-
-//    public ProjectRecord getProjectRecord() {
-//        return projectRecord;
-//    }
-
-//    public void setProjectRecord(ProjectRecord projectRecord) {
-//        this.projectRecord = projectRecord;
-//    }
 
     public Customer getCustomer() {
         return customer;

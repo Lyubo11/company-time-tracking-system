@@ -3,6 +3,7 @@ package com.company.timecompany.controllers;
 import com.company.timecompany.entities.Role;
 import com.company.timecompany.entities.User;
 import com.company.timecompany.exceptions.UserNotFoundException;
+import com.company.timecompany.repositories.ProjectRepository;
 import com.company.timecompany.repositories.RoleRepository;
 import com.company.timecompany.repositories.UserRepository;
 import com.company.timecompany.services.UserService;
@@ -27,6 +28,8 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired
+    private ProjectRepository projectRepository;
+    @Autowired
     private RoleRepository roleRepository;
 
     @GetMapping("/users")
@@ -44,7 +47,7 @@ public class UserController {
 
         model.addAttribute("user", user);
         model.addAttribute("listRoles", listRoles);
-        model.addAttribute("pageTitle","Create New User");
+        model.addAttribute("pageTitle", "Create New User");
         return "/user/user-form";
     }
 
@@ -60,6 +63,7 @@ public class UserController {
             return new ModelAndView("redirect:/users");
         }
     }
+
     @GetMapping("/users/edit/{id}")
     public String editUser(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes, Model model) {
         try {
@@ -68,7 +72,7 @@ public class UserController {
 
             model.addAttribute("user", user);
             model.addAttribute("listRoles", listRoles);
-            model.addAttribute("pageTitle","Edit User (ID: " +id + ")" );
+            model.addAttribute("pageTitle", "Edit User (ID: " + id + ")");
 
             return "user/user-form";
         } catch (UserNotFoundException ex) {
@@ -76,6 +80,7 @@ public class UserController {
         }
         return "redirect:/user/users";
     }
+
     @GetMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
         try {
@@ -86,6 +91,7 @@ public class UserController {
         }
         return "redirect:/users";
     }
+
     @GetMapping("/users/{id}/enabled/{status}")
     public String updateUserEnabledStatus(@PathVariable("id") Integer id, @PathVariable("status") boolean enabled, RedirectAttributes redirectAttributes) {
         userService.updateUserEnabledStatus(id, enabled);
@@ -93,5 +99,13 @@ public class UserController {
         String message = "The User ID " + id + " has been " + status;
         redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/users";
+    }
+    @GetMapping("/users-project/info")
+    public String getUsersInfo(Model model) {
+        List<User> listUsers = userService.listAllEmployees();
+//        List<Project> listProjects = projectRepository.findAll();
+        model.addAttribute("listUsers", listUsers);
+//        model.addAttribute("listProjects", listProjects);
+        return "user/users-info";
     }
 }
