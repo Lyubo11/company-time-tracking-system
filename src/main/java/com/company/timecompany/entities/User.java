@@ -1,6 +1,8 @@
 package com.company.timecompany.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,13 +14,22 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    @NotBlank(message = "Username is required")
+    @Size(min = 4, max = 30, message = "Username must be between 4 and 30 characters")
     private String username;
+    @NotBlank(message = "Password is required")
+    @Size(min = 4, max = 30, message = "Password must be between 4 and 100 characters")
+    @Column(length = 30,nullable = false)
     private String password;
-
+    @NotBlank(message = "First name is required")
+    @Size(max = 50, message = "First name cannot be longer than 50 characters")
     private String firstName;
+    @NotBlank(message = "Last name is required")
+    @Size(max = 50, message = "Last name cannot be longer than 50 characters")
+    @Column(length = 50,nullable = false)
     private String lastName;
 
+    @NotBlank(message = "Created at date is required")
     private String createdAt;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_projects", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"))
@@ -31,6 +42,10 @@ public class User {
     private boolean enabled;
 
     public User() {
+    }
+    public User(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public User(String username, String password, String firstName, String lastName) {
@@ -110,6 +125,10 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
     }
 
     @Override

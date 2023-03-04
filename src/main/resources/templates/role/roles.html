@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Roles</title>
+    <link rel="stylesheet" th:href="@{/fontawesome/all.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+<body>
+<div class="container">
+    <h1>Manage Roles</h1>
+
+    <div class="alert alert-success text-center" th:if="${message!=null}">
+        [[${message}]]
+    </div>
+
+    <div>
+        <table class="table table-bordered table-stripped table-hover table-responsive">
+            <thead class="table-dark">
+            <tr>
+                <th>User ID</th>
+                <th>Description</th>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="role:${listRoles}">
+                <td>[[${role.id}]]</td>
+                <td>[[${role.description}]]</td>
+                <td>[[${role.name}]]</td>
+                <td>
+                    <a class="fa-solid fa-pen-to-square icon-green fa-2x" th:href="@{'/roles/edit/' + ${role.id}}"
+                       title="Edit Role"></a>
+                    &nbsp;
+                    <a class="fa-solid fa-trash icon-dark fa-2x link-delete" th:href="@{'/roles/delete/' + ${role.id}}"
+                       th:userId="${role.id}"
+                       title="Delete Role"></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
