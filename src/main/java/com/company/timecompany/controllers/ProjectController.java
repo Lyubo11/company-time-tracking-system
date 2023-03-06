@@ -1,9 +1,13 @@
 package com.company.timecompany.controllers;
 
+import com.company.timecompany.entities.Customer;
 import com.company.timecompany.entities.Project;
+import com.company.timecompany.entities.ProjectRecord;
+import com.company.timecompany.entities.User;
+import com.company.timecompany.repositories.CustomerRepository;
+import com.company.timecompany.repositories.ProjectRecordRepository;
 import com.company.timecompany.repositories.ProjectRepository;
 import com.company.timecompany.repositories.UserRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,67 +16,70 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 public class ProjectController {
-
     @Autowired
     private ProjectRepository projectRepository;
-
+    @Autowired
+    private CustomerRepository customerRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ProjectRecordRepository projectRecordRepository;
 
     @GetMapping("/projects")
     public String listAllProjects(Model model) {
         List<Project> listProjects = projectRepository.findAll();
+        List<ProjectRecord> listProjectRecords = projectRecordRepository.findAll();
+        List<User> listUsers = userRepository.findAll();
         model.addAttribute("listProjects", listProjects);
-        return "project/projects";
+        model.addAttribute("listProjectRecords", listProjectRecords);
+        model.addAttribute("listUsers", listUsers);
+        return "/project/projects";
     }
 
     @GetMapping("/projects/new")
-    public String newProject(Project project, User user, Model model) {
-        List<Project> projectList = projectRepository.findAll();
-        List<com.company.timecompany.entities.User> userList = userRepository.findAll();
+    private String createNewProject(Project project, Model model) {
+        List<Project> listProjects = projectRepository.findAll();
+        List<Customer> listCustomers = customerRepository.findAll();
+        List<User> listUsers = userRepository.findAll();
         model.addAttribute("project", project);
-        model.addAttribute("projectList", projectList);
-        model.addAttribute("userList", userList);
-        return "/project/project-form";
+        model.addAttribute("listProjects", listProjects);
+        model.addAttribute("listCustomers", listCustomers);
+        model.addAttribute("listUsers", listUsers);
+        return "project/project-form";
     }
 
     @PostMapping("/projects/submit")
-    public ModelAndView saveProject(@Valid Project project, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
+    private ModelAndView saveProject(@Valid Project project, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("/projects/new");
+            System.out.println("error");
+            return new ModelAndView("projects/new");
         } else {
+            System.out.println("save");
             projectRepository.save(project);
-            redirectAttributes.addFlashAttribute("message", "The project has been saved successfully!");
-            return new ModelAndView("redirect:/projects");
+            return new ModelAndView("redirect:/projects/");
         }
     }
 
-    @GetMapping("/projects/edit/{projectId}")
-    private String editProject(@PathVariable(name = "projectId") Integer projectId, Model model) {
-        model.addAttribute("project", projectRepository.findById(projectId));
-        return "/project/edit";
+    @GetMapping("/projects/edit/{id}")
+    private String editProject(@PathVariable("id") Integer id, Model model) {
+        Project project = projectRepository.findById(id).get();
+        List<Project> listProjects = projectRepository.findAll();
+        List<Customer> listCustomers = customerRepository.findAll();
+        model.addAttribute("project", project);
+        model.addAttribute("listProjects", listProjects);
+        model.addAttribute("listCustomers", listCustomers);
+        return "project/project-form";
     }
 
-    @PostMapping("/update")
-    private String updateProject(@Valid Project project, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "/project/edit";
-        }
-        projectRepository.save(project);
-        return "redirect:/project/projects";
-    }
-
-    @PostMapping("/delete/{projectId}")
-    private String deleteCustomer(@PathVariable(name = "projectId") Integer projectId) {
-        projectRepository.deleteById(projectId);
-        return "redirect:/projects";
+    @GetMapping("/projects/delete/{id}")
+    private ModelAndView deleteProject(@PathVariable("id") Integer id, Model model) {
+        projectRepository.deleteById(id);
+        return new ModelAndView("redirect:/projects");
     }
 }

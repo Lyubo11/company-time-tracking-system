@@ -13,32 +13,58 @@
 
 <div>
     <form enctype="multipart/form-data" method="post" style="max-width: 700px; margin: 0 auto"
-          th:action="@{/customers/submit}"
-          th:object="${customer}">
+          th:action="@{/projects/submit}"
+          th:object="${project}">
         <input type="hidden" th:field="*{id}"/>
         <div class="border border-secondary rounded p-3">
             <div class="form-group row mb-2">
-                <label class="col-form-label col-sm-4">Name</label>
+                <label class="col-sm-4 col-form-label">Name</label>
                 <div class="col-sm-8">
-                    <input type="text" class="form-control" id="name" name="name"
-                           placeholder="Enter name" required
-                           th:value="${customer.name}" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}"
-                         th:each="err : ${#fields.errors('name')}" th:text="${err}"></div>
+                    <input class="form-control" name="name" placeholder="Enter name" required
+                           th:field="*{name}" type="text"/>
                 </div>
             </div>
             <div class="form-group row mb-2">
-                <label class="col-sm-4 col-form-label">Country</label>
+                <label class="col-sm-4 col-form-label">Description</label>
                 <div class="col-sm-8">
-                    <input class="form-control" name="username" placeholder="Enter country" required
-                           th:field="*{country}" type="text"/>
+                    <input class="form-control" name="description" placeholder="Enter description" required
+                           th:field="*{description}" type="text"/>
                 </div>
             </div>
             <div class="form-group row mb-2">
-                <label class="col-form-label col-sm-4">Contract Expiration</label>
+                <label class="col-form-label col-sm-4">Customer</label>
                 <div class="col-sm-8">
-                    <input class="form-control" name="name" placeholder="Enter hours" required
-                           th:field="*{contractExpiration}" type="date"/>
+                    <select th:type="text" th:field="*{customer}" required>
+                        <option th:each="customer : ${listCustomers}"
+                                th:text="${customer.name}"
+                                th:value="${customer.id}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row mb-2">
+                <label class="col-form-label col-sm-4">Role:</label>
+                <div class="col-sm-8">
+                    <th:block th:each="role : ${listRoles}">
+                        <input class="m-2" th:field="*{roles}"
+                               th:text="${role.name}"
+                               th:value="${role.id}"
+                        />
+
+                    </th:block>
+                </div>
+            </div>
+            <div class="form-group row mb-2">
+                <label class="col-sm-4 col-form-label">Start date</label>
+                <div class="col-sm-8">
+                    <input class="form-control" name="startDate" placeholder="Enter start date" required
+                           th:field="*{startDate}" type="date"/>
+                </div>
+            </div>
+            <div class="form-group row mb-2">
+                <label class="col-sm-4 col-form-label">End date</label>
+                <div class="col-sm-8">
+                    <input class="form-control" name="endDate" placeholder="Enter end date" required
+                           th:field="*{endDate}" type="date"/>
                 </div>
             </div>
 
