@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Project's List</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Project name</th>
+            <th>Description</th>
+            <th>Customer ID</th>
+            <th>Start date</th>
+            <th>End date</th>
+        </tr>
+        <tr th:each="project: ${listProjects}">
+            <td th:text="${project.id}"></td>
+            <td th:text="${project.projectName}"></td>
+            <td th:text="${project.description}"></td>
+            <td th:text="${project.customer.name}"></td>
+            <td th:text="${project.startDate}"></td>
+            <td th:text="${project.endDate}"></td>
+            <td>
+                <a th:href="@{/projects/edit/{projectId}(projectId=${project.id})}">Edit</a>
+            </td>
+            <td>
+                <form th:action="@{/projects/delete/{projectId}(projectId=${project.id})}" method="post">
+                    <input type="submit" value="Delete">
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

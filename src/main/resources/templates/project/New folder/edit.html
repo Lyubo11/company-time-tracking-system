@@ -2,16 +2,15 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Create a Project</title>
+    <title>Edit a Project</title>
 </head>
 <body>
 <form th:action="@{/projects/submit}" method="post" th:object="${project}">
+    <input type="hidden" th:field="*{id}">
     <p>Project's name: <input type="text" th:field="*{projectName}" required></p>
     <p class="red" th:if="${#fields.hasErrors('projectName')}" th:errors="*{projectName}"></p>
     <p>Project's description: <input type="text" th:field="*{description}" required></p>
     <p class="red" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
-    <p>Project Record: <input type="text" th:field="*{projectRecord}" required></p>
-    <p class="red" th:if="${#fields.hasErrors('projectRecord')}" th:errors="*{projectRecord}"></p>
     <p>Customer: <input type="text" th:field="*{customer}" required></p>
     <p class="red" th:if="${#fields.hasErrors('customer')}" th:errors="*{customer}"></p>
     <p>Start date: <input type="date" th:field="*{startDate}" required></p>

@@ -1,33 +1,56 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Create a Customer</title>
-</head>
+    <title>List of Customers</title>
+    <link rel="stylesheet" th:href="@{/fontawesome/all.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
 <body>
-    <table>
+<div>
+    <h1>List of Customers</h1>
+</div>
+<div class="alert alert-success text-center" th:if="${message!=null}">
+    [[${message}]]
+</div>
+<div class="position-relative m-2 mx-4 me-auto">
+    <form th:action="@{/users/records}" method="get">
+        <input type="text" name="keyword" th:value="${keyword}" placeholder="Search by keyword..."/>
+        <input type="number" name="weekNumber" th:value="${weekNumber}"
+               placeholder="Filter by week number..."/>
+        <button type="submit">Search</button>
+    </form>
+</div>
+<div>
+    <table class="table table-responsive-xL">
+        <thead class="table-dark">
         <tr>
             <th>ID</th>
             <th>Name</th>
             <th>Country</th>
-            <th>Project</th>
             <th>Contract expiration</th>
+            <th>Actions</th>
         </tr>
-        <tr th:each="customer: ${customers}">
+        </thead>
+        <tbody>
+        <tr th:each="customer: ${listCustomers}">
             <td th:text="${customer.id}"></td>
             <td th:text="${customer.name}"></td>
             <td th:text="${customer.country}"></td>
-            <td th:text="${customer.projects}"></td>
             <td th:text="${customer.contractExpiration}"></td>
             <td>
-                <a th:href="@{/customers/edit/{customerId}(customerId=${customer.id})}">Edit</a>
-            </td>
-            <td>
-                <form th:action="@{/customers/delete/{customerId}(customerId=${customer.id})}" method="post">
-                    <input type="submit" value="Delete">
-                </form>
+                <a class="fa-solid fa-pen-to-square icon-green fa-2x" th:href="@{'/customers/edit/' + ${customer.id}}"
+                   title="Edit User"></a>
+                &nbsp;
+                <a class="fa-solid fa-trash icon-dark fa-2x link-delete" th:href="@{'/customers/delete/' + ${customer.id}}"
+                   th:userId="${customer.id}"
+                   title="Delete User"></a>
             </td>
         </tr>
+        </tbody>
     </table>
+</div>
+
 </body>
 </html>

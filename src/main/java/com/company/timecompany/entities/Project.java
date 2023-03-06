@@ -10,7 +10,7 @@ import java.util.List;
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Integer id;
 
-        private String projectName;
+        private String name;
         private String description;
         @OneToMany(mappedBy = "project")
         private List<ProjectRecord> projectRecords = new ArrayList<>();
@@ -29,12 +29,12 @@ import java.util.List;
         this.id = id;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public String getName() {
+        return name;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

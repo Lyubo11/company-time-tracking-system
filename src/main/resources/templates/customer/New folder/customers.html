@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer's List</title>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Contract expiration</th>
+        </tr>
+        <tr th:each="customer: ${listCustomers}">
+            <td th:text="${customer.id}"></td>
+            <td th:text="${customer.name}"></td>
+            <td th:text="${customer.country}"></td>
+            <td th:text="${customer.contractExpiration}"></td>
+            <td>
+                <a th:href="@{/customers/edit/{customerId}(customerId=${customer.id})}">Edit</a>
+            </td>
+            <td>
+                <form th:action="@{/customers/delete/{customerId}(customerId=${customer.id})}" method="post">
+                    <input type="submit" value="Delete">
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
