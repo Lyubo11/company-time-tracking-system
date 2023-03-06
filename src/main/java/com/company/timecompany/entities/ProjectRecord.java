@@ -2,20 +2,22 @@ package com.company.timecompany.entities;
 
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
+@Table(name = "project_records")
 public class ProjectRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String summary;
     private String status;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
-    private String date;
-    private int hoursWorked;
 
+    private Date date;
+    private int hoursWorked;
 
     public Integer getId() {
         return id;
@@ -49,11 +51,11 @@ public class ProjectRecord {
         this.project = project;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -63,5 +65,17 @@ public class ProjectRecord {
 
     public void setHoursWorked(int hoursWorked) {
         this.hoursWorked = hoursWorked;
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectRecord{" +
+                "id=" + id +
+                ", summary='" + summary + '\'' +
+                ", status='" + status + '\'' +
+                ", project=" + project +
+                ", date=" + date +
+                ", hoursWorked=" + hoursWorked +
+                '}';
     }
 }

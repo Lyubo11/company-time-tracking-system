@@ -1,7 +1,10 @@
 package com.company.timecompany.entities;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +29,16 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     private boolean enabled;
+
+    public User() {
+    }
+
+    public User(String username, String password, String firstName, String lastName) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public Integer getId() {
         return id;
@@ -99,4 +112,14 @@ public class User {
         this.enabled = enabled;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", projectList=" + projectList +
+                ", roles=" + roles +
+                '}';
+    }
 }

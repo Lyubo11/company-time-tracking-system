@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec=https://www.thymeleaf.org/thymeleaf-extras-springsecurity5>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Home page</title>
+    <link rel="stylesheet" th:href="@{/fontawesome/all.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+</head>
+<body>
+<!-- create navigation bar ( header) -->
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+    <button class="navbar-toggler" type="button" data-toggler="collapse" data-target="#">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="topNavbar">
+        <ul class="navbar-nav">
+            <li class="navbar-item" sec:authorize="hasAnyAuthority('Admin')">
+                <a class="nav-link" th:href="@{/users}">Users</a>
+            </li>&nbsp;
+            <li class="navbar-item" sec:authorize="hasAnyAuthority('Admin')">
+                <a class="nav-link" th:href="@{/users-project/info}">Users-Info</a>
+            </li>&nbsp; <li class="navbar-item" sec:authorize="hasAnyAuthority('Admin')">
+            <a class="nav-link" th:href="@{/}">Project-assign</a>
+        </li>&nbsp;
+            <th:block sec:authorize="hasAnyAuthority('Admin','Employee')">
+                <li class="navbar-item">
+                    <a class="nav-link" th:href="@{/users-project/new}">Projects</a>
+                </li>&nbsp;
+                <li class="navbar-item" sec:authorize="hasAnyAuthority('Employee')">
+                    <a class="nav-link" th:href="@{/users/records}">Records</a>
+            </th:block>
+            </li>&nbsp;
+            <li class="navbar-item me-3">
+         <a class="nav-link" sec:authentication="principal.fullName"></a>
+            </li>
+            <li class="navbar-item me-3">
+                <span class="fa-solid fa-user fa-2x icon-silver"></span>
+            </li>
+            <li class="navbar-item me-3">
+                <form class="navbar-item" th:action="@{/logout}" method="post">
+                    <input type="submit" value="Logout"/>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+</nav>
+
+<br>
+<br>
+
+<div class="container">
+    <h1>Welcome</h1>
+</div>
+</body>
+</html>
