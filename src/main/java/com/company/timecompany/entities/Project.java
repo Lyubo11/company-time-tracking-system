@@ -20,6 +20,18 @@ import java.util.List;
         private String startDate;
         private String endDate;
 
+    public Project() {
+    }
+
+    public Project(Integer id, String name, String description, Customer customer, String startDate, String endDate) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.customer = customer;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -72,14 +84,17 @@ import java.util.List;
         return projectRecords;
     }
 
-    @Override
-    public String toString() {
-        return this.id.toString();
-    }
-
     public void setProjectRecords(List<ProjectRecord> projectRecords) {
         this.projectRecords = projectRecords;
+    }
 
-
+    public Project(Integer id, String name, String description, List<ProjectRecord> projectRecords, Customer customer, String startDate, String endDate) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.projectRecords = projectRecords;
+        this.customer = customer;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 }

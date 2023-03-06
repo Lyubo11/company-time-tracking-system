@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -28,43 +27,38 @@ public class CustomerController {
     }
 
     @GetMapping("/customers/new")
-    public String newCustomer(Customer customer, Model model) {
-        List<Customer> customerList = customerRepository.findAll();
+    private String createNewProduct(Customer customer, Model model) {
+        List<Customer> listCustomers = customerRepository.findAll();
         model.addAttribute("customer", customer);
-        model.addAttribute("listRoles", customerList);
-        return "/customer/customer-form";
+        model.addAttribute("listCustomers", listCustomers);
+        return "customer/customer-form";
     }
 
     @PostMapping("/customers/submit")
-    public ModelAndView saveCustomer(@Valid Customer customer, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
+    private ModelAndView saveProduct(@Valid Customer customer, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("/customers/new");
+            System.out.println("error");
+            return new ModelAndView("customers/new");
         } else {
+            System.out.println("save");
             customerRepository.save(customer);
-            redirectAttributes.addFlashAttribute("message", "The customer has been saved successfully!");
-            return new ModelAndView("redirect:/customers");
+            return new ModelAndView("redirect:/customers/");
         }
     }
 
-    @GetMapping("/customers/edit/{customerId}")
-    private String editCustomer(@PathVariable(name = "customerId") Integer customerId, Model model) {
-        model.addAttribute("customer", customerRepository.findById(customerId));
-        return "/customer/edit";
+    @GetMapping("/customers/edit/{id}")
+    private String editProduct(@PathVariable("id") Integer id, Model model) {
+        Customer customer = customerRepository.findById(id).get();
+        List<Customer> listCustomers = customerRepository.findAll();
+        model.addAttribute("customer", customer);
+        model.addAttribute("listCustomers", listCustomers);
+        return "customer/customer-form";
     }
 
-    @PostMapping("/update")
-    private String updateCustomer(@Valid Customer customer, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "/customer/edit";
-        }
-        customerRepository.save(customer);
-        return "redirect:/customer/customers";
+    @GetMapping("/customers/delete/{id}")
+    private ModelAndView deleteProduct(@PathVariable("id") Integer id, Model model) {
+        customerRepository.deleteById(id);
+        return new ModelAndView("redirect:/customers");
     }
 
-    @PostMapping("/delete/{customerId}")
-    private String deleteCustomer(@PathVariable(name = "customerId") Integer customerId) {
-        customerRepository.deleteById(customerId);
-        return "redirect:/customers";
-    }
 }

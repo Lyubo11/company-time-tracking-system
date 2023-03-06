@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List of Projects</title>
+    <link rel="stylesheet" th:href="@{/fontawesome/all.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<body>
+<div>
+    <h1>List of Projects</h1>
+</div>
+<div class="alert alert-success text-center" th:if="${message!=null}">
+    [[${message}]]
+</div>
+<div class="position-relative m-2 mx-4 me-auto">
+    <form th:action="@{/users/records}" method="get">
+        <input type="text" name="keyword" th:value="${keyword}" placeholder="Search by keyword..."/>
+        <input type="number" name="weekNumber" th:value="${weekNumber}"
+               placeholder="Filter by week number..."/>
+        <button type="submit">Search</button>
+    </form>
+</div>
+<div>
+    <table class="table table-responsive-xL">
+        <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Customer</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="project: ${listProjects}">
+            <td th:text="${project.id}"></td>
+            <td th:text="${project.name}"></td>
+            <td th:text="${project.description}"></td>
+            <td th:text="${project.customer.name}"></td>
+            <td th:text="${project.startDate}"></td>
+            <td th:text="${project.endDate}"></td>
+            <td>
+                <a class="fa-solid fa-pen-to-square icon-green fa-2x" th:href="@{'/projects/edit/' + ${project.id}}"
+                   title="Edit User"></a>
+                &nbsp;
+                <a class="fa-solid fa-trash icon-dark fa-2x link-delete" th:href="@{'/projects/delete/' + ${project.id}}"
+                   th:userId="${project.id}"
+                   title="Delete User"></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

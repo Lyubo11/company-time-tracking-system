@@ -1,8 +1,8 @@
 package com.company.timecompany.entities;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -10,11 +10,25 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String name;
     @OneToMany(mappedBy = "customer")
     private List<Project> projects = new ArrayList<>();
 
-    private Date ContractExpiration;
+    private String country;
+
+    private Date contractExpiration;
+
+    public Customer() {
+    }
+
+    public Customer(Integer id, String name, List<Project> projects, String country, Date contractExpiration) {
+        this.id = id;
+        this.name = name;
+        this.projects = projects;
+        this.country = country;
+        this.contractExpiration = contractExpiration;
+    }
 
     public Integer getId() {
         return id;
@@ -26,6 +40,15 @@ public class Customer {
 
     public String getName() {
         return name;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public void setName(String name) {
@@ -41,10 +64,21 @@ public class Customer {
     }
 
     public Date getContractExpiration() {
-        return ContractExpiration;
+        return contractExpiration;
     }
 
     public void setContractExpiration(Date contractExpiration) {
-        ContractExpiration = contractExpiration;
+        this.contractExpiration = contractExpiration;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", projects=" + projects +
+                ", country='" + country + '\'' +
+                ", contractExpiration=" + contractExpiration +
+                '}';
     }
 }
