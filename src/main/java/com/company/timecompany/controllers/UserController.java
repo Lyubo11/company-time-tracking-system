@@ -100,12 +100,12 @@ public class UserController {
         redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/users";
     }
-    @GetMapping("/users-project/info")
-    public String getUsersInfo(Model model) {
-        List<User> listUsers = userService.listAllEmployees();
-//        List<Project> listProjects = projectRepository.findAll();
-        model.addAttribute("listUsers", listUsers);
-//        model.addAttribute("listProjects", listProjects);
-        return "user/users-info";
-    }
+//    @GetMapping("/users-project/info")
+//    public String getUsersInfo(Model model) {
+//        List<User> listUsers = userService.listAllEmployees();
+////        List<Project> listProjects = projectRepository.findAll();
+//        model.addAttribute("listUsers", listUsers);
+////        model.addAttribute("listProjects", listProjects);
+//        return "user/users-info";
+//    }
 }

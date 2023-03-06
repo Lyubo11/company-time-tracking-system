@@ -1,8 +1,7 @@
 package com.company.timecompany.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -14,26 +13,25 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotBlank(message = "Username is required")
-    @Size(min = 4, max = 30, message = "Username must be between 4 and 30 characters")
+    //    @NotBlank(message = "Username is required")
+//    @Size(min = 4, max = 30, message = "Username must be between 4 and 30 characters")
     private String username;
-    @NotBlank(message = "Password is required")
-    @Size(min = 4, max = 30, message = "Password must be between 4 and 100 characters")
-    @Column(length = 30,nullable = false)
+    //    @NotBlank(message = "Password is required")
+//    @Size(min =4, max = 30, message = "Password must be between 4 and 100 characters")
+//    @Column(length = 30, nullable = false)
     private String password;
-    @NotBlank(message = "First name is required")
-    @Size(max = 50, message = "First name cannot be longer than 50 characters")
+    //    @NotBlank(message = "First name is required")
+//    @Size(max = 50, message = "First name cannot be longer than 50 characters")
     private String firstName;
-    @NotBlank(message = "Last name is required")
-    @Size(max = 50, message = "Last name cannot be longer than 50 characters")
-    @Column(length = 50,nullable = false)
+    //    @NotBlank(message = "Last name is required")
+//    @Size(max = 50, message = "Last name cannot be longer than 50 characters")
+    @Column(length = 50, nullable = false)
     private String lastName;
 
-    @NotBlank(message = "Created at date is required")
-    private String createdAt;
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "users_projects", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "project_id", referencedColumnName = "id"))
-    private List<Project> projectList = new ArrayList<Project>();
+    //    @NotBlank(message = "Created at date is required")
+    private Date createdAt;
+    @OneToMany(mappedBy = "user")
+    private List<Project> projects = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -43,6 +41,7 @@ public class User {
 
     public User() {
     }
+
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -95,20 +94,20 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
-    public List<Project> getProjectList() {
-        return projectList;
+    public List<Project> getProjects() {
+        return projects;
     }
 
-    public void setProjectList(List<Project> projectList) {
-        this.projectList = projectList;
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 
     public Set<Role> getRoles() {
@@ -137,7 +136,7 @@ public class User {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", createdAt='" + createdAt + '\'' +
-                ", projectList=" + projectList +
+//                ", projectList=" + projectList +
                 ", roles=" + roles +
                 '}';
     }

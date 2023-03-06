@@ -8,6 +8,7 @@ import com.company.timecompany.repositories.CustomerRepository;
 import com.company.timecompany.repositories.ProjectRecordRepository;
 import com.company.timecompany.repositories.ProjectRepository;
 import com.company.timecompany.repositories.UserRepository;
+import com.company.timecompany.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,8 @@ public class ProjectController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private UserService userService;
+    @Autowired
     private ProjectRecordRepository projectRecordRepository;
 
     @GetMapping("/projects")
@@ -46,7 +49,7 @@ public class ProjectController {
     private String createNewProject(Project project, Model model) {
         List<Project> listProjects = projectRepository.findAll();
         List<Customer> listCustomers = customerRepository.findAll();
-        List<User> listUsers = userRepository.findAll();
+        List<User> listUsers = userService.listAllEmployees();
         model.addAttribute("project", project);
         model.addAttribute("listProjects", listProjects);
         model.addAttribute("listCustomers", listCustomers);

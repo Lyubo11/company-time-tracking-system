@@ -5,20 +5,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-    public class Project {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Integer id;
-        private String name;
-        private String description;
-        @OneToMany(mappedBy = "project")
-        private List<ProjectRecord> projectRecords = new ArrayList<>();
-        @ManyToOne
-        @JoinColumn(name = "customer_id")
-        private Customer customer;
-
-        private String startDate;
-        private String endDate;
+public class Project {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String name;
+    private String description;
+    @OneToMany(mappedBy = "project")
+    private List<ProjectRecord> projectRecords = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+//    @ManyToMany
+//    @JoinTable(name = "project_users",
+//            joinColumns = @JoinColumn(name = "project_id"),
+//            inverseJoinColumns = @JoinColumn(name = "user_id"))
+//    private Set<User> users = new HashSet<>();
+@ManyToOne(fetch = FetchType.LAZY)
+@JoinColumn(name = "user_id")
+private User user;
+     private String startDate;
+    private String endDate;
 
     public Project() {
     }
@@ -86,6 +93,14 @@ import java.util.List;
 
     public void setProjectRecords(List<ProjectRecord> projectRecords) {
         this.projectRecords = projectRecords;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Project(Integer id, String name, String description, List<ProjectRecord> projectRecords, Customer customer, String startDate, String endDate) {

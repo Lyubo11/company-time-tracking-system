@@ -42,15 +42,13 @@
                 </div>
             </div>
             <div class="form-group row mb-2">
-                <label class="col-form-label col-sm-4">Role:</label>
+                <label class="col-form-label col-sm-4">User</label>
                 <div class="col-sm-8">
-                    <th:block th:each="role : ${listRoles}">
-                        <input class="m-2" th:field="*{roles}"
-                               th:text="${role.name}"
-                               th:value="${role.id}"
-                        />
-
-                    </th:block>
+                    <select th:type="text" th:field="*{user}" required>
+                        <option th:each="user : ${listUsers}"
+                                th:text="${user.firstName}"
+                                th:value="${user.id}"></option>
+                    </select>
                 </div>
             </div>
             <div class="form-group row mb-2">

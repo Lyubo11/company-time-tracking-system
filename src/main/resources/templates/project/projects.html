@@ -30,6 +30,7 @@
             <th>Name</th>
             <th>Description</th>
             <th>Customer</th>
+            <th>Asigned</th>
             <th>Start date</th>
             <th>End date</th>
             <th>Actions</th>
@@ -41,6 +42,7 @@
             <td th:text="${project.name}"></td>
             <td th:text="${project.description}"></td>
             <td th:text="${project.customer.name}"></td>
+            <td th:text="${project.user.firstName}"></td>
             <td th:text="${project.startDate}"></td>
             <td th:text="${project.endDate}"></td>
             <td>
