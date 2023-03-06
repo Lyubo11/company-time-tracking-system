@@ -3,9 +3,11 @@ package com.company.timecompany.controllers;
 import com.company.timecompany.entities.Customer;
 import com.company.timecompany.entities.Project;
 import com.company.timecompany.entities.ProjectRecord;
+import com.company.timecompany.entities.User;
 import com.company.timecompany.repositories.CustomerRepository;
 import com.company.timecompany.repositories.ProjectRecordRepository;
 import com.company.timecompany.repositories.ProjectRepository;
+import com.company.timecompany.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,14 +27,18 @@ public class ProjectController {
     @Autowired
     private CustomerRepository customerRepository;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private ProjectRecordRepository projectRecordRepository;
 
     @GetMapping("/projects")
     public String listAllProjects(Model model) {
         List<Project> listProjects = projectRepository.findAll();
         List<ProjectRecord> listProjectRecords = projectRecordRepository.findAll();
+        List<User> listUsers = userRepository.findAll();
         model.addAttribute("listProjects", listProjects);
         model.addAttribute("listProjectRecords", listProjectRecords);
+        model.addAttribute("listUsers", listUsers);
         return "/project/projects";
     }
 
@@ -40,9 +46,11 @@ public class ProjectController {
     private String createNewProject(Project project, Model model) {
         List<Project> listProjects = projectRepository.findAll();
         List<Customer> listCustomers = customerRepository.findAll();
+        List<User> listUsers = userRepository.findAll();
         model.addAttribute("project", project);
         model.addAttribute("listProjects", listProjects);
         model.addAttribute("listCustomers", listCustomers);
+        model.addAttribute("listUsers", listUsers);
         return "project/project-form";
     }
 

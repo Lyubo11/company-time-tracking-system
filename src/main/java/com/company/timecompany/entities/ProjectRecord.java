@@ -1,6 +1,8 @@
 package com.company.timecompany.entities;
 
 
+import com.company.timecompany.constants.ProjectStatus;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -11,14 +13,26 @@ public class ProjectRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String summary;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private ProjectStatus status;
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
-
     private Date date;
     private int hoursWorked;
 
+    public ProjectRecord(String summary) {
+        this.summary = summary;
+    }
+
+    public ProjectRecord(Integer id, String summary) {
+        this.id = id;
+        this.summary = summary;
+
+    }
+
+    public ProjectRecord() {
+    }
     public Integer getId() {
         return id;
     }
@@ -35,11 +49,11 @@ public class ProjectRecord {
         this.summary = summary;
     }
 
-    public String getStatus() {
+    public ProjectStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(ProjectStatus status) {
         this.status = status;
     }
 

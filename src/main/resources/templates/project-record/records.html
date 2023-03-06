@@ -31,6 +31,7 @@
             <th>status</th>
             <th>Date</th>
             <th>Work duration</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -40,7 +41,14 @@
             <td>[[${record.status}]]</td>
             <td>[[${record.date}]]</td>
             <td>[[${record.hoursWorked}]]</td>
-
+            <td>
+                <a class="fa-solid fa-pen-to-square icon-green fa-2x" th:href="@{'/users/records/edit/' + ${record.id}}"
+                   title="Edit record"></a>
+                &nbsp;
+                <a class="fa-solid fa-trash icon-dark fa-2x link-delete" th:href="@{'/users/records/delete/' + ${record.id}}"
+                   th:userId="${record.id}"
+                   title="Delete record"></a>
+            </td>
         </tr>
         </tbody>
     </table>

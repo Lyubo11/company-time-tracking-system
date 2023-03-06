@@ -1,8 +1,8 @@
 package com.company.timecompany.entities;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,11 +11,23 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private String country;
     @OneToMany(mappedBy = "customer")
     private List<Project> projects = new ArrayList<>();
 
+    private String country;
+
     private Date contractExpiration;
+
+    public Customer() {
+    }
+
+    public Customer(Integer id, String name, List<Project> projects, String country, Date contractExpiration) {
+        this.id = id;
+        this.name = name;
+        this.projects = projects;
+        this.country = country;
+        this.contractExpiration = contractExpiration;
+    }
 
     public Integer getId() {
         return id;
@@ -33,14 +45,6 @@ public class Customer {
         this.name = name;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public List<Project> getProjects() {
         return projects;
     }
@@ -55,5 +59,16 @@ public class Customer {
 
     public void setContractExpiration(Date contractExpiration) {
         this.contractExpiration = contractExpiration;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", projects=" + projects +
+                ", country='" + country + '\'' +
+                ", contractExpiration=" + contractExpiration +
+                '}';
     }
 }

@@ -56,7 +56,7 @@ public class UserService {
             user.setPassword(encodedPassword);
         }
 
-        private void setPasswordEncoder (User user){
+        void setPasswordEncoder(User user){
             String encodedPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encodedPassword);
         }

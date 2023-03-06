@@ -55,7 +55,7 @@ public class UserController {
     public ModelAndView saveUser(User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("/users/new");
+            return new ModelAndView("users/new");
         } else {
             userService.save(user);
 //            userRepository.save(user);
