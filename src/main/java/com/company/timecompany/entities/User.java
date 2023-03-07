@@ -129,6 +129,9 @@ public class User {
     public void addRole(Role role) {
         roles.add(role);
     }
+    public boolean isAdmin() {
+        return getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("admin"));
+    }
 
     @Override
     public String toString() {

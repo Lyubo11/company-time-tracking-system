@@ -16,11 +16,6 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
-//    @ManyToMany
-//    @JoinTable(name = "project_users",
-//            joinColumns = @JoinColumn(name = "project_id"),
-//            inverseJoinColumns = @JoinColumn(name = "user_id"))
-//    private Set<User> users = new HashSet<>();
 @ManyToOne(fetch = FetchType.LAZY)
 @JoinColumn(name = "user_id")
 private User user;

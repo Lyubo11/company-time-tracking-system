@@ -12,7 +12,7 @@
 
 <div>
     <form enctype="multipart/form-data" method="post" style="max-width: 700px; margin: 0 auto"
-          th:action="@{/users/records/submit}"
+          th:action="@{/records/submit}"
           th:object="${projectRecord}">
         <input type="hidden" th:field="*{id}"/>
         <div class="border border-secondary rounded p-3">

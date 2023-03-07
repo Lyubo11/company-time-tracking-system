@@ -16,6 +16,7 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.getUserByUsername(username);
         if(user!=null){
+            System.out.println("User Roles: " + user.getRoles());
             return new MyUserDetails(user);
         }
 

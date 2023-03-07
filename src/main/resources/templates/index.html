@@ -11,7 +11,6 @@
 
 </head>
 <body>
-<!-- create navigation bar ( header) -->
 <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
     <button class="navbar-toggler" type="button" data-toggler="collapse" data-target="#">
         <span class="navbar-toggler-icon"></span>
@@ -19,19 +18,19 @@
     <div class="collapse navbar-collapse" id="topNavbar">
         <ul class="navbar-nav">
             <li class="navbar-item" sec:authorize="hasAnyAuthority('Admin')">
-                <a class="nav-link" th:href="@{/users}">Users</a>
+                <a class="nav-link" th:href="@{/roles}">Roles</a>
             </li>&nbsp;
             <li class="navbar-item" sec:authorize="hasAnyAuthority('Admin')">
-                <a class="nav-link" th:href="@{/users-project/info}">Users-Info</a>
-            </li>&nbsp; <li class="navbar-item" sec:authorize="hasAnyAuthority('Admin')">
-            <a class="nav-link" th:href="@{/}">Project-assign</a>
+                <a class="nav-link" th:href="@{/users}">Users</a>
+            </li>&nbsp; <li class="navbar-item" sec:authorize="hasAnyAuthority('Admin','Employee')">
+            <a class="nav-link" th:href="@{/projects}">Projects</a>
         </li>&nbsp;
             <th:block sec:authorize="hasAnyAuthority('Admin','Employee')">
                 <li class="navbar-item">
-                    <a class="nav-link" th:href="@{/users-project/new}">Projects</a>
+                    <a class="nav-link" th:href="@{/records}">Records</a>
                 </li>&nbsp;
-                <li class="navbar-item" sec:authorize="hasAnyAuthority('Employee')">
-                    <a class="nav-link" th:href="@{/users/records}">Records</a>
+                <li class="navbar-item" sec:authorize="hasAnyAuthority('Admin')">
+                    <a class="nav-link" th:href="@{/customers}">Customers</a>
             </th:block>
             </li>&nbsp;
             <li class="navbar-item me-3">

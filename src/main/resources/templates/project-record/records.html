@@ -15,7 +15,7 @@
     [[${message}]]
 </div>
 <div class="position-relative m-2 mx-4 me-auto">
-    <form th:action="@{/users/records}" method="get">
+    <form th:action="@{records}" method="get">
         <input type="text" name="keyword" th:value="${keyword}" placeholder="Search by keyword..."/>
         <input type="number" name="weekNumber" th:value="${weekNumber}"
                placeholder="Filter by week number..."/>
@@ -27,6 +27,7 @@
         <thead class="table-dark">
         <tr>
             <th>Project</th>
+            <th>User</th>
             <th>Summary</th>
             <th>status</th>
             <th>Date</th>
@@ -36,16 +37,17 @@
         </thead>
         <tbody>
         <tr th:each="record:${listRecords}">
-            <td>[[${record.project}]]</td>
+            <td>[[${record.project.name}]]</td>
+            <td>[[${record.project.user.firstName}]]</td>
             <td>[[${record.summary}]]</td>
             <td>[[${record.status}]]</td>
             <td>[[${record.date}]]</td>
             <td>[[${record.hoursWorked}]]</td>
             <td>
-                <a class="fa-solid fa-pen-to-square icon-green fa-2x" th:href="@{'/users/records/edit/' + ${record.id}}"
+                <a class="fa-solid fa-pen-to-square icon-green fa-2x" th:href="@{'/records/edit/' + ${record.id}}"
                    title="Edit record"></a>
                 &nbsp;
-                <a class="fa-solid fa-trash icon-dark fa-2x link-delete" th:href="@{'/users/records/delete/' + ${record.id}}"
+                <a class="fa-solid fa-trash icon-dark fa-2x link-delete" th:href="@{'/records/delete/' + ${record.id}}"
                    th:userId="${record.id}"
                    title="Delete record"></a>
             </td>

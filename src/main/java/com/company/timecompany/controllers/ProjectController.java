@@ -8,6 +8,7 @@ import com.company.timecompany.repositories.CustomerRepository;
 import com.company.timecompany.repositories.ProjectRecordRepository;
 import com.company.timecompany.repositories.ProjectRepository;
 import com.company.timecompany.repositories.UserRepository;
+import com.company.timecompany.services.ProjectService;
 import com.company.timecompany.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,10 +34,12 @@ public class ProjectController {
     private UserService userService;
     @Autowired
     private ProjectRecordRepository projectRecordRepository;
+    @Autowired
+    private ProjectService projectService;
 
     @GetMapping("/projects")
     public String listAllProjects(Model model) {
-        List<Project> listProjects = projectRepository.findAll();
+        List<Project> listProjects = projectService.findAllByCurrentUser();
         List<ProjectRecord> listProjectRecords = projectRecordRepository.findAll();
         List<User> listUsers = userRepository.findAll();
         model.addAttribute("listProjects", listProjects);
@@ -47,13 +50,17 @@ public class ProjectController {
 
     @GetMapping("/projects/new")
     private String createNewProject(Project project, Model model) {
-        List<Project> listProjects = projectRepository.findAll();
+//        List<Project> listProjects = projectRepository.findAll();
+        List<Project> listProjects = projectService.findAllByCurrentUser();
         List<Customer> listCustomers = customerRepository.findAll();
         List<User> listUsers = userService.listAllEmployees();
+//        List<User> listUsers = userRepository.findAll();
+
         model.addAttribute("project", project);
         model.addAttribute("listProjects", listProjects);
         model.addAttribute("listCustomers", listCustomers);
         model.addAttribute("listUsers", listUsers);
+        model.addAttribute("pageTitle", "New Project");
         return "project/project-form";
     }
 
@@ -72,11 +79,13 @@ public class ProjectController {
     @GetMapping("/projects/edit/{id}")
     private String editProject(@PathVariable("id") Integer id, Model model) {
         Project project = projectRepository.findById(id).get();
-        List<Project> listProjects = projectRepository.findAll();
+//        List<Project> listProjects = projectRepository.findAll();
+        List<Project> listProjects = projectService.findAllByCurrentUser();
         List<Customer> listCustomers = customerRepository.findAll();
         model.addAttribute("project", project);
         model.addAttribute("listProjects", listProjects);
         model.addAttribute("listCustomers", listCustomers);
+        model.addAttribute("pageTitle", "Edit Project (ID: " + id + ")");
         return "project/project-form";
     }
 

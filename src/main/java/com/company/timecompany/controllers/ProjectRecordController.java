@@ -3,9 +3,12 @@ package com.company.timecompany.controllers;
 import com.company.timecompany.constants.ProjectStatus;
 import com.company.timecompany.entities.Project;
 import com.company.timecompany.entities.ProjectRecord;
+import com.company.timecompany.entities.User;
 import com.company.timecompany.repositories.ProjectRecordRepository;
 import com.company.timecompany.repositories.ProjectRepository;
+import com.company.timecompany.repositories.UserRepository;
 import com.company.timecompany.services.ProjectRecordService;
+import com.company.timecompany.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.text.ParseException;
 import java.util.List;
 
@@ -30,27 +34,26 @@ public class ProjectRecordController {
     private ProjectRepository projectRepository;
     @Autowired
     private ProjectRecordService projectRecordService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ProjectService projectService;
 
-    @GetMapping("users/records")
+    @GetMapping("records")
     public String listAll(Model model, @RequestParam(value = "keyword",required = false) String keyword,
-                          @RequestParam(value = "weekNumber",required = false) Integer weekNumber) {
-         List<ProjectRecord> listRecords = projectRecordService.findAll(keyword,weekNumber);
-         List<Project> listProjects = projectRepository.findAll();
-
+                          @RequestParam(value = "weekNumber",required = false) Integer weekNumber, Principal principal) {
+        User currentUser = userRepository.getUserByUsername(principal.getName());
+        List<ProjectRecord> listRecords = projectRecordService.findAll(keyword,weekNumber,currentUser);
+//         List<Project> listProjects = projectRepository.findAll();
+        List<Project> listProjects = projectService.findAllByCurrentUser();
         model.addAttribute("listRecords", listRecords);
         model.addAttribute("listProjects", listProjects);
         model.addAttribute("keyword", keyword);
         model.addAttribute("weekNumber", weekNumber);
         return "project-record/records";
     }
-//    @GetMapping("users/records/{weekNumber}/{year}")
-//    public String showProjectRecordsByWeek(@PathVariable int weekNumber, @PathVariable int year, Model model) {
-//        List<ProjectRecord> projectRecords = projectRecordService.getProjectRecordsByWeek(weekNumber, year);
-//        model.addAttribute("projectRecords", projectRecords);
-//        return "project-record/records";
-//    }
 
-    @GetMapping("users/records/new")
+    @GetMapping("records/new")
     private String createNewRecord(ProjectRecord projectRecord, Model model) throws ParseException {
         List<Project> listProjects = projectRepository.findAll();
         model.addAttribute("listStatuses", ProjectStatus.values());
@@ -60,20 +63,20 @@ public class ProjectRecordController {
         return "project-record/record-form";
     }
 
-    @PostMapping("users/records/submit")
+    @PostMapping("records/submit")
     private ModelAndView saveProduct(@Valid ProjectRecord projectRecord, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             System.out.println("error");
-            return new ModelAndView("users/records/new");
+            return new ModelAndView("records/new");
         } else {
             System.out.println("save");
             projectRecordRepository.save(projectRecord);
             redirectAttributes.addFlashAttribute("message", "The record has been saved successfully.");
-            return new ModelAndView("redirect:/users/records");
+            return new ModelAndView("redirect:/records");
         }
     }
 
-    @GetMapping("/users/records/edit/{id}")
+    @GetMapping("/records/edit/{id}")
     private String editProduct(@PathVariable("id") Integer id, Model model) {
         ProjectRecord projectRecord = projectRecordRepository.findById(id).get();
         List<ProjectRecord> listRecords = projectRecordRepository.findAll();
@@ -87,9 +90,9 @@ public class ProjectRecordController {
         return "project-record/record-form";
     }
 
-    @GetMapping("/users/records/delete/{id}")
+    @GetMapping("/records/delete/{id}")
     private ModelAndView deleteProduct(@PathVariable("id") Integer id, Model model) {
         projectRecordRepository.deleteById(id);
-        return new ModelAndView("redirect:/users/records");
+        return new ModelAndView("redirect:/records");
     }
 }
