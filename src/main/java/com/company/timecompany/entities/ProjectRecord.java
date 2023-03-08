@@ -4,6 +4,9 @@ package com.company.timecompany.entities;
 import com.company.timecompany.constants.ProjectStatus;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 import java.sql.Date;
 
 @Entity
@@ -12,12 +15,17 @@ public class ProjectRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotBlank(message = "Summary cannot be blank")
+    @Size(max = 255, message = "Summary must be at most 255 characters")
+    @Column(length = 255,nullable = false)
     private String summary;
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
+    @PastOrPresent(message = "Date must be present")
     private Date date;
     private int hoursWorked;
 

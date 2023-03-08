@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -52,10 +53,10 @@ public class UserController {
     }
 
     @PostMapping("/users/submit")
-    public ModelAndView saveUser(User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public ModelAndView saveUser(@Valid User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("users/new");
+            return new ModelAndView("user/user-form");
         } else {
             userService.save(user);
 //            userRepository.save(user);

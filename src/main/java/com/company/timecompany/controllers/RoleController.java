@@ -39,7 +39,7 @@ public class RoleController {
     @PostMapping("/roles/submit")
     private ModelAndView saveRole(@Valid Role role, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("role/roles/new");
+            return new ModelAndView("role/role-form");
         } else {
             roleRepository.save(role);
             redirectAttributes.addFlashAttribute("message", "The role has been saved successfully.");

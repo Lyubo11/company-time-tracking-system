@@ -67,7 +67,7 @@ public class ProjectRecordController {
     private ModelAndView saveProduct(@Valid ProjectRecord projectRecord, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             System.out.println("error");
-            return new ModelAndView("records/new");
+            return new ModelAndView("project-record/record-form");
         } else {
             System.out.println("save");
             projectRecordRepository.save(projectRecord);

@@ -19,8 +19,9 @@
             <div class="form-group row mb-2">
                 <label class="col-sm-4 col-form-label">Description</label>
                 <div class="col-sm-8">
-                    <input class="form-control" name="username" placeholder="Enter description" required
+                    <input class="form-control" name="username" placeholder="Enter description"
                            th:field="*{description}" type="text"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Description is required</p>
                 </div>
             </div>
             <div class="form-group row mb-2">
@@ -28,16 +29,21 @@
                 <div class="col-sm-8">
                     <input class="form-control" name="name" placeholder="Enter name" required
                            th:field="*{name}" type="text"/>
+                    <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name is required (maximum length 40 characters)</p>
                 </div>
             </div>
             <div class="text-center p-3">
                 <input type="submit" value="Save" class="btn btn-primary m-3"/>
-                <input type="button" value="Cancel" class="btn btn-secondary" id="buttonCancel"/>
+                <input type="button" value="Cancel" class="btn btn-secondary" onclick="cancel()"/>
             </div>
         </div>
-</div>
 </form>
 </div>
 
+<script>
+function cancel() {
+    window.location.href = "/roles";
+}
+</script>
 </body>
 </html>
