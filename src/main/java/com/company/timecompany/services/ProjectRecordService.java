@@ -32,6 +32,26 @@ public List<ProjectRecord> findAll(String keyword, Integer weekNumber, User curr
     List<ProjectRecord> recordList = new ArrayList<>();
     if(currentUser.isAdmin()) {
         // User is an admin, fetch all records
+        recordList = getAllProjectRecords(keyword, weekNumber, recordList);
+    } else {
+        // User is not an admin, fetch only their own records
+        recordList = getUserProjectRecords(keyword, weekNumber, currentUser, recordList);
+    }
+    return recordList;
+}
+
+    List<ProjectRecord> getUserProjectRecords(String keyword, Integer weekNumber, User currentUser, List<ProjectRecord> recordList) {
+        if (keyword == null && weekNumber == null) {
+            recordList = projectRecordRepository.findByProjectUser(currentUser);
+        } else if (keyword != null && weekNumber == null) {
+            recordList = projectRecordRepository.searchByProjectUser(currentUser, keyword);
+        } else if (weekNumber != null) {
+            recordList = projectRecordRepository.findByWeekNumberAndProjectUser(weekNumber, currentUser);
+        }
+        return recordList;
+    }
+
+    List<ProjectRecord> getAllProjectRecords(String keyword, Integer weekNumber, List<ProjectRecord> recordList) {
         if(keyword == null && weekNumber == null){
             recordList = projectRecordRepository.findAll();
         } else if(keyword != null && weekNumber == null){
@@ -39,16 +59,6 @@ public List<ProjectRecord> findAll(String keyword, Integer weekNumber, User curr
         } else if(weekNumber != null){
             recordList = projectRecordRepository.findByWeekNumber(weekNumber);
         }
-    } else {
-        // User is not an admin, fetch only their own records
-        if(keyword == null && weekNumber == null){
-            recordList = projectRecordRepository.findByProjectUser(currentUser);
-        } else if(keyword != null && weekNumber == null){
-            recordList = projectRecordRepository.searchByProjectUser(currentUser, keyword);
-        } else if(weekNumber != null){
-            recordList = projectRecordRepository.findByWeekNumberAndProjectUser(weekNumber, currentUser);
-        }
+        return recordList;
     }
-    return recordList;
-}
 }

@@ -1,6 +1,7 @@
 package com.company.timecompany.services;
 
 import com.company.timecompany.entities.ProjectRecord;
+import com.company.timecompany.entities.User;
 import com.company.timecompany.repositories.ProjectRecordRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,37 +27,106 @@ class ProjectRecordServiceTest {
     @Mock
     private ProjectRecordRepository projectRecordRepository;
 
-    @Test
-    public void testFindAllIfNoFilterCriterias() {
-        List<ProjectRecord> testData = new ArrayList<>();
-        testData.add(new ProjectRecord());
-        testData.add(new ProjectRecord());
 
-        when(projectRecordRepository.findAll()).thenReturn(testData);
-        List<ProjectRecord> result = projectRecordService.findAll(null, null);
-        assertEquals(testData, result);
-    }
     @Test
-    public void testFindAllWithKeyword() {
+    public void testGetAllProjectRecordsWithKeyword() {
         String keyword = "test";
-        List<ProjectRecord> expectedRecords = new ArrayList<>();
-        expectedRecords.add(new ProjectRecord("Test Project 1"));
-        expectedRecords.add(new ProjectRecord("Test Project 2"));
+        Integer weekNumber = null;
+        List<ProjectRecord> expectedList = new ArrayList<>();
+        expectedList.add(new ProjectRecord("Test project"));
 
-        when(projectRecordRepository.searchAll(keyword)).thenReturn(expectedRecords);
-        List<ProjectRecord> actualRecords = projectRecordService.findAll(keyword, null);
-        assertEquals(expectedRecords, actualRecords);
+        when(projectRecordRepository.searchAll(keyword)).thenReturn(expectedList);
+
+        List<ProjectRecord> actualList = projectRecordService.getAllProjectRecords(keyword, weekNumber, null);
+
+        assertEquals(expectedList, actualList);
         verify(projectRecordRepository, times(1)).searchAll(keyword);
+        verify(projectRecordRepository, never()).findAll();
+        verify(projectRecordRepository, never()).findByWeekNumber(anyInt());
+    }
+
+    @Test
+    public void testGetAllProjectRecordsWithWeekNumber() {
+        String keyword = null;
+        Integer weekNumber = 1;
+        List<ProjectRecord> expectedList = new ArrayList<>();
+        expectedList.add(new ProjectRecord("Project 1"));
+
+        when(projectRecordRepository.findByWeekNumber(weekNumber)).thenReturn(expectedList);
+
+        List<ProjectRecord> actualList = projectRecordService.getAllProjectRecords(keyword, weekNumber, null);
+
+        assertEquals(expectedList, actualList);
+        verify(projectRecordRepository, never()).searchAll(anyString());
+        verify(projectRecordRepository, never()).findAll();
+        verify(projectRecordRepository, times(1)).findByWeekNumber(weekNumber);
     }
     @Test
-    public void testFindAllByWeekNumber() {
-        List<ProjectRecord> testList = new ArrayList<>();
-        testList.add(new ProjectRecord(1, "Project 1"));
-        testList.add(new ProjectRecord(2, "Project 2"));
-        when(projectRecordRepository.findByWeekNumber(1)).thenReturn(testList);
+    public void testGetAllProjectRecordsWithNoParameters() {
+        String keyword = null;
+        Integer weekNumber = null;
+        List<ProjectRecord> expectedList = new ArrayList<>();
+        expectedList.add(new ProjectRecord("Project 1"));
+        expectedList.add(new ProjectRecord("Project 2"));
 
-        List<ProjectRecord> result = projectRecordService.findAll(null, 1);
-        assertEquals(testList, result);
-        verify(projectRecordRepository, times(1)).findByWeekNumber(1);
+        when(projectRecordRepository.findAll()).thenReturn(expectedList);
+        List<ProjectRecord> actualList = projectRecordService.getAllProjectRecords(keyword, weekNumber, null);
+
+        assertEquals(expectedList, actualList);
+        verify(projectRecordRepository, never()).searchAll(anyString());
+        verify(projectRecordRepository, times(1)).findAll();
+        verify(projectRecordRepository, never()).findByWeekNumber(anyInt());
+    }
+    @Test
+    public void testGetUserProjectRecordsWithKeyword() {
+        String keyword = "test";
+        Integer weekNumber = null;
+        User currentUser = new User("testUser");
+        List<ProjectRecord> expectedList = new ArrayList<>();
+        expectedList.add(new ProjectRecord("Test project"));
+
+        when(projectRecordRepository.searchByProjectUser(currentUser, keyword)).thenReturn(expectedList);
+
+        List<ProjectRecord> actualList = projectRecordService.getUserProjectRecords(keyword, weekNumber, currentUser, null);
+
+        assertEquals(expectedList, actualList);
+        verify(projectRecordRepository, times(1)).searchByProjectUser(currentUser, keyword);
+        verify(projectRecordRepository, never()).findByProjectUser(any());
+        verify(projectRecordRepository, never()).findByWeekNumberAndProjectUser(anyInt(), any());
+    }
+    @Test
+    public void testGetUserProjectRecordsWithWeekNumber() {
+        String keyword = null;
+        Integer weekNumber = 1;
+        User currentUser = new User("testUser");
+        List<ProjectRecord> expectedList = new ArrayList<>();
+        expectedList.add(new ProjectRecord("Project 1"));
+
+        when(projectRecordRepository.findByWeekNumberAndProjectUser(weekNumber, currentUser)).thenReturn(expectedList);
+
+        List<ProjectRecord> actualList = projectRecordService.getUserProjectRecords(keyword, weekNumber, currentUser, null);
+
+        assertEquals(expectedList, actualList);
+        verify(projectRecordRepository, never()).searchByProjectUser(any(), anyString());
+        verify(projectRecordRepository, never()).findByProjectUser(any());
+        verify(projectRecordRepository, times(1)).findByWeekNumberAndProjectUser(weekNumber, currentUser);
+    }
+    @Test
+    public void testGetUserProjectRecordsWithNoParameters() {
+        String keyword = null;
+        Integer weekNumber = null;
+        User currentUser = new User("testUser");
+        List<ProjectRecord> expectedList = new ArrayList<>();
+        expectedList.add(new ProjectRecord("Project 1"));
+        expectedList.add(new ProjectRecord("Project 2"));
+
+        when(projectRecordRepository.findByProjectUser(currentUser)).thenReturn(expectedList);
+
+        List<ProjectRecord> actualList = projectRecordService.getUserProjectRecords(keyword, weekNumber, currentUser, null);
+
+        assertEquals(expectedList, actualList);
+        verify(projectRecordRepository, never()).searchByProjectUser(any(), anyString());
+        verify(projectRecordRepository, times(1)).findByProjectUser(currentUser);
+        verify(projectRecordRepository, never()).findByWeekNumberAndProjectUser(anyInt(), any());
     }
 }

@@ -21,9 +21,9 @@ public class User {
     @Size(min = 4, max = 30, message = "Password must be between 4 and 100 characters")
     @Column(length = 30, nullable = false)
     private String password;
-    @Size(min = 2,max = 50, message = "First name must be between 2 and  50 characters")
+    @Size(min = 2, max = 50, message = "First name must be between 2 and  50 characters")
     private String firstName;
-    @Size(min =2, max = 50, message = "Last name must be between 2 and  50 characters")
+    @Size(min = 2, max = 50, message = "Last name must be between 2 and  50 characters")
     @Column(length = 50, nullable = false)
     private String lastName;
     @PastOrPresent(message = "The creation date must be in the past or present")
@@ -44,6 +44,16 @@ public class User {
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+
+    public User(String username, boolean enabled) {
+        this.username = username;
+        this.enabled = enabled;
+    }
+
+    public User(String username) {
+        this.username = username;
     }
 
     public User(String username, String password, String firstName, String lastName) {

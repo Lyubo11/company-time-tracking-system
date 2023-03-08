@@ -25,6 +25,10 @@ private User user;
     public Project() {
     }
 
+    public Project(String name) {
+        this.name = name;
+    }
+
     public Project(Integer id, String name, String description, Customer customer, String startDate, String endDate) {
         this.id = id;
         this.name = name;
