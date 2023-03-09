@@ -41,11 +41,9 @@ public class UserController {
     }
 
     @GetMapping("/users/new")
-    public String newUser(Model model) {
+    public String newUser(User user, Model model) {
         List<Role> listRoles = roleRepository.findAll();
-        User user = new User();
         user.setEnabled(true);
-
         model.addAttribute("user", user);
         model.addAttribute("listRoles", listRoles);
         model.addAttribute("pageTitle", "Create New User");

@@ -18,8 +18,7 @@ public class User {
     private Integer id;
     @Size(min = 4, max = 30, message = "Username must be between 4 and 30 characters")
     private String username;
-    @Size(min = 4, max = 30, message = "Password must be between 4 and 100 characters")
-    @Column(length = 30, nullable = false)
+    @Column(length = 64, nullable = false)
     private String password;
     @Size(min = 2, max = 50, message = "First name must be between 2 and  50 characters")
     private String firstName;
