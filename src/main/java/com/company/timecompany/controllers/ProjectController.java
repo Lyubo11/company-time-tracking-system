@@ -68,7 +68,7 @@ public class ProjectController {
     private ModelAndView saveProject(@Valid Project project, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             System.out.println("error");
-            return new ModelAndView("projects/new");
+            return new ModelAndView("project/project-form");
         } else {
             System.out.println("save");
             projectRepository.save(project);

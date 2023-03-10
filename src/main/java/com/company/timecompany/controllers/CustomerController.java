@@ -38,7 +38,7 @@ public class CustomerController {
     private ModelAndView saveProduct(@Valid Customer customer, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             System.out.println("error");
-            return new ModelAndView("customers/new");
+            return new ModelAndView("customer/customer-form");
         } else {
             System.out.println("save");
             customerRepository.save(customer);
