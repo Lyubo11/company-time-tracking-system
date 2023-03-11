@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Statistics ow working time</title>
+    <link rel="stylesheet" th:href="@{/fontawesome/all.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:history.back()">Back</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div>
+    <h3>Statistics ow working time</h3>
+</div>
+<div class="alert alert-success text-center" th:if="${message!=null}">
+    [[${message}]]
+</div>
+<div>
+    <table class="table table-responsive-xL">
+        <thead class="table-dark">
+        <tr>
+            <th>Project</th>
+            <th>Employee</th>
+            <th>Total Hours Worked</th>
+        </tr>
+        </thead>
+        <tbody>
+        <th:block th:each="userProjectHoursEntry : ${userProjectHours}">
+            <th:block th:with="username=${userProjectHoursEntry.key}, projectHours=${userProjectHoursEntry.value}">
+                <th:block th:each="projectHoursEntry : ${projectHours}">
+                    <tr>
+                        <td th:text="${projectHoursEntry.key}"></td>
+                        <td th:text="${username}"></td>
+                        <td th:text="${projectHoursEntry.value}"></td>
+                    </tr>
+                </th:block>
+            </th:block>
+        </th:block>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
