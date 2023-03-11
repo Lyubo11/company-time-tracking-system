@@ -1,6 +1,8 @@
 package com.company.timecompany.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +14,14 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Size(min = 4, max = 30, message = "Name must be between 4 and 30 characters")
     private String name;
     @OneToMany(mappedBy = "customer")
     private List<Project> projects = new ArrayList<>();
 
     private String country;
 
+    @FutureOrPresent(message = "Date must be present")
     private Date contractExpiration;
 
     public Customer() {

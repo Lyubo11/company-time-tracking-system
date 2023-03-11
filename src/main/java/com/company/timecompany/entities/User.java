@@ -25,7 +25,6 @@ public class User {
     @Size(min = 2, max = 50, message = "Last name must be between 2 and  50 characters")
     @Column(length = 50, nullable = false)
     private String lastName;
-    @PastOrPresent(message = "The creation date must be in the past or present")
     private Date createdAt;
     @OneToMany(mappedBy = "user")
     private List<Project> projects = new ArrayList<>();
@@ -142,17 +141,6 @@ public class User {
         return getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("admin"));
     }
 
-//    public int getTotalHoursWorked() {
-//        int totalHours = 0;
-//        for (Project project : projects) {
-//            for (ProjectRecord record : project.getProjectRecords()) {
-//                if (record.getDate() != null) {
-//                    totalHours += record.getHoursWorked();
-//                }
-//            }
-//        }
-//        return totalHours;
-//    }
     @Override
     public String toString() {
         return "User{" +

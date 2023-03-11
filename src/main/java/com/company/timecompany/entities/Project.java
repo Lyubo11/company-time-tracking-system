@@ -1,7 +1,10 @@
 package com.company.timecompany.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +15,10 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Size(min = 4, max = 30, message = "Name must be between 4 and 30 characters")
     private String name;
+    @NotBlank
     private String description;
     @OneToMany(mappedBy = "project")
     private List<ProjectRecord> projectRecords = new ArrayList<>();
@@ -24,6 +30,7 @@ public class Project {
     private User user;
     @PastOrPresent(message = "Date must be present")
     private Date startDate;
+    @FutureOrPresent(message = "Date must be present")
     private Date endDate;
 
     public Project() {
@@ -106,8 +113,7 @@ public class Project {
         this.user = user;
     }
 
-    public Project(Integer id, String name, String description, List<ProjectRecord> projectRecords, Customer customer
-            ,Date startDate, Date endDate) {
+    public Project(Integer id, String name, String description, List<ProjectRecord> projectRecords, Customer customer, Date startDate, Date endDate) {
         this.id = id;
         this.name = name;
         this.description = description;

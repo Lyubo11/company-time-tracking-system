@@ -18,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -56,6 +58,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("user/user-form");
         } else {
+            user.setCreatedAt(Date.valueOf(LocalDate.now()));
             userService.save(user);
             redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
             return new ModelAndView("redirect:/users");

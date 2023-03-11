@@ -23,6 +23,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -42,17 +44,6 @@ public class ProjectController {
     @Autowired
     private ProjectRecordService projectRecordService;
 
-
-//    @GetMapping("/projects")
-//    public String listAllProjects(Model model) {
-//        List<Project> listProjects = projectService.findAllByCurrentUser();
-//        List<ProjectRecord> listProjectRecords = projectRecordRepository.findAll();
-//        List<User> listUsers = userRepository.findAll();
-//        model.addAttribute("listProjects", listProjects);
-//        model.addAttribute("listProjectRecords", listProjectRecords);
-//        model.addAttribute("listUsers", listUsers);
-//        return "/project/projects";
-//    }
 @GetMapping("/projects")
 public String listAllProjects(Model model, @RequestParam(value = "keyword",required = false) String keyword,
                               @RequestParam(value = "weekNumber",required = false) Integer weekNumber, Principal principal) {
