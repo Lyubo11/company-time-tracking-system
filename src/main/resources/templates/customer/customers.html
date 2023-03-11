@@ -10,7 +10,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{users/new}">New Customer</a>
+        <a class="navbar-brand" th:href="@{customers/new}">New Customer</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -26,21 +26,13 @@
     </div>
 </nav>
 <div>
-    <h1>List of Customers</h1>
+    <h1 class="text-center text-primary">List of Customers</h1>
 </div>
 <div class="alert alert-success text-center" th:if="${message!=null}">
     [[${message}]]
 </div>
-<div class="position-relative m-2 mx-4 me-auto">
-    <form th:action="@{/users/records}" method="get">
-        <input type="text" name="keyword" th:value="${keyword}" placeholder="Search by keyword..."/>
-        <input type="number" name="weekNumber" th:value="${weekNumber}"
-               placeholder="Filter by week number..."/>
-        <button type="submit">Search</button>
-    </form>
-</div>
 <div>
-    <table class="table table-responsive-xL">
+    <table class="table table-bordered table-stripped table-hover table-responsive">
         <thead class="table-dark">
         <tr>
             <th>ID</th>

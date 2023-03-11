@@ -92,7 +92,7 @@ class ProjectRecordServiceTest {
         assertEquals(expectedList, actualList);
         verify(projectRecordRepository, times(1)).searchByProjectUser(currentUser, keyword);
         verify(projectRecordRepository, never()).findByProjectUser(any());
-        verify(projectRecordRepository, never()).findByWeekNumberAndProjectUser(anyInt(), any());
+        verify(projectRecordRepository, never()).findByWeekNumberForProjectUser(anyInt(), any());
     }
     @Test
     public void testGetUserProjectRecordsWithWeekNumber() {
@@ -102,14 +102,14 @@ class ProjectRecordServiceTest {
         List<ProjectRecord> expectedList = new ArrayList<>();
         expectedList.add(new ProjectRecord("Project 1"));
 
-        when(projectRecordRepository.findByWeekNumberAndProjectUser(weekNumber, currentUser)).thenReturn(expectedList);
+        when(projectRecordRepository.findByWeekNumberForProjectUser(weekNumber, currentUser)).thenReturn(expectedList);
 
         List<ProjectRecord> actualList = projectRecordService.getUserProjectRecords(keyword, weekNumber, currentUser, null);
 
         assertEquals(expectedList, actualList);
         verify(projectRecordRepository, never()).searchByProjectUser(any(), anyString());
         verify(projectRecordRepository, never()).findByProjectUser(any());
-        verify(projectRecordRepository, times(1)).findByWeekNumberAndProjectUser(weekNumber, currentUser);
+        verify(projectRecordRepository, times(1)).findByWeekNumberForProjectUser(weekNumber, currentUser);
     }
     @Test
     public void testGetUserProjectRecordsWithNoParameters() {
@@ -127,6 +127,6 @@ class ProjectRecordServiceTest {
         assertEquals(expectedList, actualList);
         verify(projectRecordRepository, never()).searchByProjectUser(any(), anyString());
         verify(projectRecordRepository, times(1)).findByProjectUser(currentUser);
-        verify(projectRecordRepository, never()).findByWeekNumberAndProjectUser(anyInt(), any());
+        verify(projectRecordRepository, never()).findByWeekNumberForProjectUser(anyInt(), any());
     }
 }

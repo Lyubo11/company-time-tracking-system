@@ -31,6 +31,7 @@ public class CustomerController {
         List<Customer> listCustomers = customerRepository.findAll();
         model.addAttribute("customer", customer);
         model.addAttribute("listCustomers", listCustomers);
+        model.addAttribute("pageTitle", "Create New Customer");
         return "customer/customer-form";
     }
 
@@ -42,7 +43,7 @@ public class CustomerController {
         } else {
             System.out.println("save");
             customerRepository.save(customer);
-            return new ModelAndView("redirect:/customers/");
+            return new ModelAndView("redirect:/customers");
         }
     }
 
@@ -52,6 +53,7 @@ public class CustomerController {
         List<Customer> listCustomers = customerRepository.findAll();
         model.addAttribute("customer", customer);
         model.addAttribute("listCustomers", listCustomers);
+        model.addAttribute("pageTitle", "Edit Customer (ID: " + id + ")");
         return "customer/customer-form";
     }
 

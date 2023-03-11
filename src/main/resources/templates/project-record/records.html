@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec=https://www.thymeleaf.org/thymeleaf-extras-springsecurity5>
 <head>
     <meta charset="UTF-8">
     <title>List of Project records</title>
@@ -10,7 +11,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{users/new}">New Record</a>
+        <a class="navbar-brand" th:href="@{records/new}" sec:authorize="hasAnyAuthority('Employee')">New Record</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -21,12 +22,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{records/statistics}">Statistics</a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 <div>
-    <h1>List of Project records</h1>
+    <h2>List of Project records</h2>
 </div>
 <div class="alert alert-success text-center" th:if="${message!=null}">
     [[${message}]]
@@ -40,7 +44,7 @@
     </form>
 </div>
 <div>
-    <table class="table table-responsive-xL">
+    <table class="table table-bordered table-stripped table-hover table-responsive">
         <thead class="table-dark">
         <tr>
             <th>Project</th>

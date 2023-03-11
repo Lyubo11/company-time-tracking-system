@@ -9,6 +9,7 @@ import com.company.timecompany.repositories.ProjectRepository;
 import com.company.timecompany.repositories.UserRepository;
 import com.company.timecompany.services.ProjectRecordService;
 import com.company.timecompany.services.ProjectService;
+import com.company.timecompany.utils.StatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ProjectRecordController {
@@ -38,13 +40,14 @@ public class ProjectRecordController {
     private UserRepository userRepository;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private StatisticsService statisticsService;
 
     @GetMapping("records")
     public String listAll(Model model, @RequestParam(value = "keyword",required = false) String keyword,
                           @RequestParam(value = "weekNumber",required = false) Integer weekNumber, Principal principal) {
         User currentUser = userRepository.getUserByUsername(principal.getName());
         List<ProjectRecord> listRecords = projectRecordService.findAll(keyword,weekNumber,currentUser);
-//         List<Project> listProjects = projectRepository.findAll();
         List<Project> listProjects = projectService.findAllByCurrentUser();
         model.addAttribute("listRecords", listRecords);
         model.addAttribute("listProjects", listProjects);
@@ -53,15 +56,24 @@ public class ProjectRecordController {
         return "project-record/records";
     }
 
-    @GetMapping("records/new")
-    private String createNewRecord(ProjectRecord projectRecord, Model model) throws ParseException {
-        List<Project> listProjects = projectRepository.findAll();
-        model.addAttribute("listStatuses", ProjectStatus.values());
-        model.addAttribute("projectRecord", projectRecord);
-        model.addAttribute("listProjects", listProjects);
-        model.addAttribute("pageTitle", "Create New Record");
-        return "project-record/record-form";
-    }
+//    @GetMapping("records/new")
+//    private String createNewRecord(ProjectRecord projectRecord, Model model) throws ParseException {
+//        List<Project> listProjects = projectRepository.findAll();
+//        model.addAttribute("listStatuses", ProjectStatus.values());
+//        model.addAttribute("projectRecord", projectRecord);
+//        model.addAttribute("listProjects", listProjects);
+//        model.addAttribute("pageTitle", "Create New Record");
+//        return "project-record/record-form";
+//    }
+@GetMapping("records/new")
+private String createNewRecord(ProjectRecord projectRecord, Model model) throws ParseException {
+    List<Project> listProjects = projectService.findAllByCurrentUser();
+    model.addAttribute("listStatuses", ProjectStatus.values());
+    model.addAttribute("projectRecord", projectRecord);
+    model.addAttribute("listProjects", listProjects);
+    model.addAttribute("pageTitle", "Create New Record");
+    return "project-record/record-form";
+}
 
     @PostMapping("records/submit")
     private ModelAndView saveProduct(@Valid ProjectRecord projectRecord, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
@@ -94,5 +106,11 @@ public class ProjectRecordController {
     private ModelAndView deleteProduct(@PathVariable("id") Integer id, Model model) {
         projectRecordRepository.deleteById(id);
         return new ModelAndView("redirect:/records");
+    }
+    @GetMapping("/records/statistics")
+    public String showHoursWorked(Model model) {
+        Map<String, Map<String, Integer>> userProjectHours = statisticsService.getUserProjectHours();
+        model.addAttribute("userProjectHours", userProjectHours);
+        return "project-record/statistics";
     }
 }

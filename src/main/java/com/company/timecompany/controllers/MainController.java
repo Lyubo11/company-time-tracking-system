@@ -13,6 +13,6 @@ public class MainController {
 
     @GetMapping("/login")
     private String viewLoginPage(){
-        return "user/login";
+        return "/login";
     }
 }

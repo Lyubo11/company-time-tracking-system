@@ -27,7 +27,7 @@
     </div>
 </nav>
 <div>
-    <h1 class="text-center m-2">Manage Project | [[${pageTitle}]]</h1>
+    <h2 class="text-center m-2">Manage Projects | [[${pageTitle}]]</h2>
 </div>
 
 <div>
@@ -63,7 +63,7 @@
             <div class="form-group row mb-2">
                 <label class="col-form-label col-sm-4">User</label>
                 <div class="col-sm-8">
-                    <select th:type="text" th:field="*{user}" required>
+                    <select th:type="text" th:field="*{user}">
                         <option th:each="user : ${listUsers}"
                                 th:text="${user.firstName}"
                                 th:value="${user.id}"></option>

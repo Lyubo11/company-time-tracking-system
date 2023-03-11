@@ -142,13 +142,23 @@ public class User {
         return getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("admin"));
     }
 
+//    public int getTotalHoursWorked() {
+//        int totalHours = 0;
+//        for (Project project : projects) {
+//            for (ProjectRecord record : project.getProjectRecords()) {
+//                if (record.getDate() != null) {
+//                    totalHours += record.getHoursWorked();
+//                }
+//            }
+//        }
+//        return totalHours;
+//    }
     @Override
     public String toString() {
         return "User{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", createdAt='" + createdAt + '\'' +
-//                ", projectList=" + projectList +
                 ", roles=" + roles +
                 '}';
     }

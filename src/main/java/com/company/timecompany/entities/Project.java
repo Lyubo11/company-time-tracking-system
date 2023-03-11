@@ -1,6 +1,8 @@
 package com.company.timecompany.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.PastOrPresent;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +19,12 @@ public class Project {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
-@ManyToOne(fetch = FetchType.LAZY)
-@JoinColumn(name = "user_id")
-private User user;
-     private String startDate;
-    private String endDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+    @PastOrPresent(message = "Date must be present")
+    private Date startDate;
+    private Date endDate;
 
     public Project() {
     }
@@ -30,7 +33,7 @@ private User user;
         this.name = name;
     }
 
-    public Project(Integer id, String name, String description, Customer customer, String startDate, String endDate) {
+    public Project(Integer id, String name, String description, Customer customer, Date startDate, Date endDate) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -71,19 +74,19 @@ private User user;
         this.customer = customer;
     }
 
-    public String getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 
@@ -103,7 +106,8 @@ private User user;
         this.user = user;
     }
 
-    public Project(Integer id, String name, String description, List<ProjectRecord> projectRecords, Customer customer, String startDate, String endDate) {
+    public Project(Integer id, String name, String description, List<ProjectRecord> projectRecords, Customer customer
+            ,Date startDate, Date endDate) {
         this.id = id;
         this.name = name;
         this.description = description;

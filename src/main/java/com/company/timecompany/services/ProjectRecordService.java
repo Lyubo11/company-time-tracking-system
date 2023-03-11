@@ -46,7 +46,7 @@ public List<ProjectRecord> findAll(String keyword, Integer weekNumber, User curr
         } else if (keyword != null && weekNumber == null) {
             recordList = projectRecordRepository.searchByProjectUser(currentUser, keyword);
         } else if (weekNumber != null) {
-            recordList = projectRecordRepository.findByWeekNumberAndProjectUser(weekNumber, currentUser);
+            recordList = projectRecordRepository.findByWeekNumberForProjectUser(weekNumber, currentUser);
         }
         return recordList;
     }

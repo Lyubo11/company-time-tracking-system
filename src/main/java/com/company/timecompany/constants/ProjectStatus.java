@@ -2,7 +2,7 @@ package com.company.timecompany.constants;
 
 public enum ProjectStatus {
     ACTIVE ("Active"),
-    COMPLETE ("Completed"),
+    COMPLETED ("Completed"),
     CANCELLED ("Cancelled");
     private String stat;
 
