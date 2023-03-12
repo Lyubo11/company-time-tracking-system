@@ -21,7 +21,7 @@ public class Customer {
 
     private String country;
 
-    @FutureOrPresent(message = "Date must be present")
+    @FutureOrPresent(message = "Date must be in the future")
     private Date contractExpiration;
 
     public Customer() {
