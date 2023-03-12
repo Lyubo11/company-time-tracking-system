@@ -42,7 +42,13 @@ public class UserService {
 
     public boolean isUsernameUnique(String username) {
         User userByUsername = userRepository.getUserByUsername(username);
-        return userByUsername == null;
+        if(userByUsername == null){
+            return false;
+        }else if(userByUsername.getUsername() !=null && userRepository.findAll().contains(userByUsername) && userByUsername.getId()==null){
+            return false;
+        } else{
+        return true;
+        }
     }
 
     public User getCurrentUser() {
