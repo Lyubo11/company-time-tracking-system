@@ -53,8 +53,11 @@ public class UserController {
     }
 
     @PostMapping("/users/submit")
-    public ModelAndView saveUser(@Valid User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public ModelAndView saveUser(@Valid User user, Model model, BindingResult bindingResult,
+                                 RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
+            List<Role> listRoles = roleRepository.findAll();
+            model.addAttribute("listRoles", listRoles);
             return new ModelAndView("user/user-form");
         } else {
             user.setCreatedAt(Date.valueOf(LocalDate.now()));

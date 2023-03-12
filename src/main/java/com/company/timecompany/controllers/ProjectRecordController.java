@@ -76,8 +76,13 @@ private String createNewRecord(ProjectRecord projectRecord, Model model) throws 
 }
 
     @PostMapping("records/submit")
-    private ModelAndView saveProduct(@Valid ProjectRecord projectRecord, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    private ModelAndView saveProduct(@Valid ProjectRecord projectRecord,Model model, BindingResult bindingResult,
+                                     RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
+            model.addAttribute("listStatuses", ProjectStatus.values());
+            List<Project> listProjects = projectService.findAllByCurrentUser();
+            model.addAttribute("listProjects", listProjects);
+
             System.out.println("error");
             return new ModelAndView("project-record/record-form");
         } else {
