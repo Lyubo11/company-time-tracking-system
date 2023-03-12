@@ -31,14 +31,14 @@
 <div class="alert alert-success text-center" th:if="${message!=null}">
     [[${message}]]
 </div>
-<div class="position-relative m-2 mx-4 me-auto">
-    <form method="get" th:action="@{projects}">
-        <input name="keyword" placeholder="Search by keyword..." th:value="${keyword}" type="text"/>
-        <input name="weekNumber" placeholder="Filter by week number..." th:value="${weekNumber}"
-               type="number"/>
-        <button type="submit">Search</button>
-    </form>
-</div>
+<!--<div class="position-relative m-2 mx-4 me-auto">-->
+<!--    <form method="get" th:action="@{projects}">-->
+<!--        <input name="keyword" placeholder="Search by keyword..." th:value="${keyword}" type="text"/>-->
+<!--        <input name="weekNumber" placeholder="Filter by week number..." th:value="${weekNumber}"-->
+<!--               type="number"/>-->
+<!--        <button type="submit">Search</button>-->
+<!--    </form>-->
+<!--</div>-->
 <div>
     <table class="table table-bordered table-stripped table-hover table-responsive">
         <thead class="table-dark">
@@ -66,7 +66,7 @@
                 <a class="fa-solid fa-pen-to-square icon-green fa-2x" sec:authorize="hasAnyAuthority('Admin')"
                    th:href="@{'/projects/edit/' + ${project.id}}"
                    title="Edit User"></a>
-                &nbsp;
+<!--                &nbsp;-->
                 <a class="fa-solid fa-trash icon-dark fa-2x link-delete" sec:authorize="hasAnyAuthority('Admin')"
                    th:href="@{'/projects/delete/' + ${project.id}}"
                    th:userId="${project.id}"

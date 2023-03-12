@@ -75,7 +75,7 @@
             <div class="form-group row mb-2">
                 <label class="col-sm-4 col-form-label">Start date</label>
                 <div class="col-sm-8">
-                    <input class="form-control" name="startDate" placeholder="Enter start date" required
+                    <input class="form-control" name="startDate" placeholder="Enter start date"
                            th:field="*{startDate}" type="date"/>
                     <p class="text-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">Start date error</p>
                 </div>

@@ -14,27 +14,11 @@ public class ProjectRecordService {
     @Autowired
     private ProjectRecordRepository projectRecordRepository;
 
-
-//    public List<ProjectRecord> findAll(String keyword, Integer weekNumber) {
-//        List<ProjectRecord> recordList = new ArrayList<>();
-//        if(keyword==null && weekNumber==null){
-//            recordList = projectRecordRepository.findAll();
-//        }else if(keyword!=null && weekNumber==null){
-//            recordList = projectRecordRepository.searchAll(keyword);
-//        }else if(weekNumber !=null){
-//            System.out.println(weekNumber);
-//            recordList =projectRecordRepository.findByWeekNumber(weekNumber);
-//            System.out.println(recordList);
-//        }
-//        return recordList;
-//    }
 public List<ProjectRecord> findAll(String keyword, Integer weekNumber, User currentUser) {
     List<ProjectRecord> recordList = new ArrayList<>();
     if(currentUser.isAdmin()) {
-        // User is an admin, fetch all records
         recordList = getAllProjectRecords(keyword, weekNumber, recordList);
     } else {
-        // User is not an admin, fetch only their own records
         recordList = getUserProjectRecords(keyword, weekNumber, currentUser, recordList);
     }
     return recordList;

@@ -18,7 +18,7 @@ public class ProjectRecord {
 
     @NotBlank(message = "Summary cannot be blank")
     @Size(max = 255, message = "Summary must be at most 255 characters")
-    @Column(length = 255,nullable = false)
+    @Column(length = 255, nullable = false)
     private String summary;
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
@@ -39,11 +39,8 @@ public class ProjectRecord {
 
     }
 
-
     public ProjectRecord() {
     }
-
-
 
     public Integer getId() {
         return id;

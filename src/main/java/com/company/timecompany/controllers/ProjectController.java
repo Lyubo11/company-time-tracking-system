@@ -78,7 +78,6 @@ public String listAllProjects(Model model, @RequestParam(value = "keyword",requi
             model.addAttribute("listUsers", listUsers);
             return new ModelAndView("project/project-form");
         } else {
-            System.out.println("save");
             projectRepository.save(project);
             return new ModelAndView("redirect:/projects");
         }
