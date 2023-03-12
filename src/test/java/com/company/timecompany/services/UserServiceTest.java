@@ -134,7 +134,7 @@ public class UserServiceTest {
             user.setUsername("John");
             user.setPassword("password");
 
-            when(userRepository.countById(1)).thenReturn(1L);
+            when(userRepository.countById(1)).thenReturn(1);
             userService.deleteUser(1);
             verify(userRepository).deleteById(1);
         }

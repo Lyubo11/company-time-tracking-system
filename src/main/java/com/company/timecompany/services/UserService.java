@@ -40,52 +40,57 @@ public class UserService {
         return employees;
     }
 
+    public boolean isUsernameUnique(String username) {
+        User userByUsername = userRepository.getUserByUsername(username);
+        return userByUsername == null;
+    }
+
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         return userRepository.getUserByUsername(username);
     }
 
-        public User save (User user){
-            boolean isUpdatingUser = (user.getId() != null);
+    public User save(User user) {
+        boolean isUpdatingUser = (user.getId() != null);
 
-            if (isUpdatingUser) {
-                User existingUser = userRepository.findById(user.getId()).get();
-                if (user.getPassword().isEmpty()) {
-                    user.setPassword(existingUser.getPassword());
-                }
-            }
-            encodePassword(user);
-            return userRepository.save(user);
-        }
-
-        private void encodePassword (User user){
-            String encodedPassword = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPassword);
-        }
-
-        void setPasswordEncoder(User user){
-            String encodedPassword = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPassword);
-        }
-
-        public User getUserId (Integer id) throws UserNotFoundException {
-            try {
-                return userRepository.findById(id).get();
-            } catch (NoSuchElementException ex) {
-                throw new UserNotFoundException("Could not find any user wid ID: " + id);
+        if (isUpdatingUser) {
+            User existingUser = userRepository.findById(user.getId()).get();
+            if (user.getPassword().isEmpty()) {
+                user.setPassword(existingUser.getPassword());
             }
         }
+        encodePassword(user);
+        return userRepository.save(user);
+    }
 
-        public void deleteUser (Integer id) throws UserNotFoundException {
-            Long countById = userRepository.countById(id);
-            if (countById == null || countById == 0) {
-                throw new UserNotFoundException("Could not find any user with ID: " + id);
-            }
-            userRepository.deleteById(id);
-        }
+    private void encodePassword(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+    }
 
-        public void updateUserEnabledStatus (Integer id,boolean enabled){
-            userRepository.updateEnabledStatus(id, enabled);
+    void setPasswordEncoder(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+    }
+
+    public User getUserId(Integer id) throws UserNotFoundException {
+        try {
+            return userRepository.findById(id).get();
+        } catch (NoSuchElementException ex) {
+            throw new UserNotFoundException("Could not find any user wid ID: " + id);
         }
     }
+
+    public void deleteUser(Integer id) throws UserNotFoundException {
+        Integer countById = userRepository.countById(id);
+        if (countById == null || countById == 0) {
+            throw new UserNotFoundException("Could not find any user with ID: " + id);
+        }
+        userRepository.deleteById(id);
+    }
+
+    public void updateUserEnabledStatus(Integer id, boolean enabled) {
+        userRepository.updateEnabledStatus(id, enabled);
+    }
+}

@@ -21,16 +21,21 @@ import java.util.Map;
 
             for (Project project : projects) {
                 for (ProjectRecord record : project.getProjectRecords()) {
-                    String usefirstNamename = record.getProject().getUser().getFirstName();
+                    String userFirstName = record.getProject().getUser().getFirstName();
                     String projectName = project.getName();
                     int hours = record.getHoursWorked();
 
-                    Map<String, Integer> projectHours = userProjectHours.get(usefirstNamename);
+                    Map<String, Integer> projectHours = userProjectHours.get(userFirstName);
                     if (projectHours == null) {
                         projectHours = new HashMap<>();
-                        userProjectHours.put(usefirstNamename, projectHours);
+                        userProjectHours.put(userFirstName, projectHours);
                     }
-                    projectHours.put(projectName, projectHours.getOrDefault(projectName, 0) + hours);
+//                    projectHours.put(projectName, projectHours.getOrDefault(projectName, 0) + hours);
+                    if (!projectHours.containsKey(projectName)) {
+                        projectHours.put(projectName, hours);
+                    } else {
+                        projectHours.put(projectName, projectHours.get(projectName) + hours);
+                    }
                 }
             }
             return userProjectHours;

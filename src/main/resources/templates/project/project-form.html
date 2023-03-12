@@ -80,14 +80,6 @@
                     <p class="text-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}">Start date error</p>
                 </div>
             </div>
-<!--            <div class="form-group">-->
-<!--                <label for="startDate">Start Date:</label>-->
-<!--                <input type="date" id="startDate" name="startDate"-->
-<!--                       th:value="${myModel.startDate}" th:classappend="${#fields.hasErrors('startDate')} ? 'is-invalid' : ''" />-->
-<!--                <div th:if="${#fields.hasErrors('startDate')}" class="invalid-feedback">-->
-<!--                    <p th:text="${#fields.errors('startDate')}"></p>-->
-<!--                </div>-->
-<!--            </div>-->
             <div class="form-group row mb-2">
                 <label class="col-sm-4 col-form-label">End date</label>
                 <div class="col-sm-8">

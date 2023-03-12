@@ -17,6 +17,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Size(min = 4, max = 30, message = "Username must be between 4 and 30 characters")
+    @Column(unique = true)
     private String username;
     @Column(length = 64, nullable = false)
     private String password;
@@ -25,6 +26,7 @@ public class User {
     @Size(min = 2, max = 50, message = "Last name must be between 2 and  50 characters")
     @Column(length = 50, nullable = false)
     private String lastName;
+    @PastOrPresent(message = "The creation date must be in the past or present")
     private Date createdAt;
     @OneToMany(mappedBy = "user")
     private List<Project> projects = new ArrayList<>();
@@ -137,10 +139,18 @@ public class User {
         roles.add(role);
     }
 
-    public boolean isAdmin() {
-        return getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("admin"));
+//    public boolean isAdmin() {
+//        return getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("admin"));
+//    }
+public boolean isAdmin() {
+    for (Role role : getRoles()) {
+        if (role.getName().equalsIgnoreCase("admin")) {
+            return true;
+        }
     }
 
+    return false;
+}
     @Override
     public String toString() {
         return "User{" +

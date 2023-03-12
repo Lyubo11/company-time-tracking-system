@@ -39,8 +39,12 @@ public class ProjectRecord {
 
     }
 
+
     public ProjectRecord() {
     }
+
+
+
     public Integer getId() {
         return id;
     }

@@ -54,11 +54,14 @@ public class UserController {
 
     @PostMapping("/users/submit")
     public ModelAndView saveUser(@Valid User user, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-
         if (bindingResult.hasErrors()) {
             return new ModelAndView("user/user-form");
         } else {
             user.setCreatedAt(Date.valueOf(LocalDate.now()));
+            if (!userService.isUsernameUnique(user.getUsername())) {
+                bindingResult.rejectValue("username", "error.user", "Username already exists");
+                return new ModelAndView("user/user-form");
+            }
             userService.save(user);
             redirectAttributes.addFlashAttribute("message", "The user has been saved successfully.");
             return new ModelAndView("redirect:/users");
