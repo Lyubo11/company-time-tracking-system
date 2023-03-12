@@ -139,9 +139,6 @@ public class User {
         roles.add(role);
     }
 
-//    public boolean isAdmin() {
-//        return getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("admin"));
-//    }
 public boolean isAdmin() {
     for (Role role : getRoles()) {
         if (role.getName().equalsIgnoreCase("admin")) {

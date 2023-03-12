@@ -19,152 +19,162 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+    @InjectMocks
+    private UserService userService;
 
 
-        @BeforeEach
-        public void setup() {
-            MockitoAnnotations.openMocks(this);
-        }
+    @Test
+    void testListAllUsers() {
+        List<User> users = new ArrayList<>();
+        users.add(new User("user", "password,", "ivan", "ivanov"));
+        users.add(new User("user1", "password,", "ivan1", "ivanov1"));
 
-        @Mock
-        private UserRepository userRepository;
+        when(userRepository.findAll()).thenReturn(users);
+        List<User> result = userService.listAllUsers();
+        verify(userRepository, times(1)).findAll();
+        assertEquals(users, result);
+    }
 
-        @Mock
-        private PasswordEncoder passwordEncoder;
+    @Test
+    public void testIsUsernameUnique() {
 
-        @InjectMocks
-        private UserService userService;
+        String username = "testuser";
+        User user = new User();
+        user.setUsername(username);
+        when(userRepository.getUserByUsername(username)).thenReturn(user);
+        boolean result = userService.isUsernameUnique(username);
+        assertFalse(result);
+    }
 
-        @Test
-        void testListAllUsers() {
-            List<User> users = new ArrayList<>();
-            users.add(new User("user", "password,",  "ivan", "ivanov"));
-            users.add(new User("user1", "password,",  "ivan1", "ivanov1"));
+    @Test
+    public void testGetAllEmployeesLIst() {
 
-            when(userRepository.findAll()).thenReturn(users);
-            List<User> result = userService.listAllUsers();
-            verify(userRepository, times(1)).findAll();
-            assertEquals(users, result);
-        }
+        Role employeeRole = mock(Role.class);
+        Mockito.when(employeeRole.getName()).thenReturn("Employee");
+        User user1 = mock(User.class);
+        Mockito.when(user1.getRoles()).thenReturn(Collections.singleton(employeeRole));
+        User user2 = mock(User.class);
+        Mockito.when(user2.getRoles()).thenReturn(Collections.emptySet());
+        User user3 = mock(User.class);
+        Mockito.when(user3.getRoles()).thenReturn(Collections.singleton(employeeRole));
 
-        @Test
-        public void testGetAllEmployeesLIst() {
+        List<User> allUsers = Arrays.asList(user1, user2, user3);
+        Mockito.when(userRepository.findAll()).thenReturn(allUsers);
+        List<User> employees = userService.listAllEmployees();
 
-            Role employeeRole = mock(Role.class);
-            Mockito.when(employeeRole.getName()).thenReturn("Employee");
-            User user1 = mock(User.class);
-            Mockito.when(user1.getRoles()).thenReturn(Collections.singleton(employeeRole));
-            User user2 = mock(User.class);
-            Mockito.when(user2.getRoles()).thenReturn(Collections.emptySet());
-            User user3 = mock(User.class);
-            Mockito.when(user3.getRoles()).thenReturn(Collections.singleton(employeeRole));
+        assertEquals(2, employees.size());
+        assertTrue(employees.contains(user1));
+        assertTrue(employees.contains(user3));
+    }
 
-            List<User> allUsers = Arrays.asList(user1, user2, user3);
-            Mockito.when(userRepository.findAll()).thenReturn(allUsers);
-            List<User> employees = userService.listAllEmployees();
+    @Test
+    public void testSaveUser() {
 
-            assertEquals(2, employees.size());
-            assertTrue(employees.contains(user1));
-            assertTrue(employees.contains(user3));
-        }
+        User user = new User();
+        user.setId(1);
+        user.setUsername("testuser");
+        user.setPassword("");
 
-        @Test
-        public void testSaveUser() {
+        User existingUser = new User();
+        existingUser.setId(1);
+        existingUser.setUsername("testuser");
+        existingUser.setPassword("password");
 
-            User user = new User();
-            user.setId(1);
-            user.setUsername("testuser");
-            user.setPassword("");
+        Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(existingUser));
+        when(userRepository.save(any(User.class))).thenAnswer(i -> {
+            User savedUser = i.getArgument(0);
+            savedUser.setPassword("password");
+            return savedUser;
+        });
 
-            User existingUser = new User();
-            existingUser.setId(1);
-            existingUser.setUsername("testuser");
-            existingUser.setPassword("password");
+        User savedUser = userService.save(user);
 
-            Mockito.when(userRepository.findById(1)).thenReturn(Optional.of(existingUser));
-            when(userRepository.save(any(User.class))).thenAnswer(i -> {
-                User savedUser = i.getArgument(0);
-                savedUser.setPassword("password");
-                return savedUser;
-            });
+        assertNotNull(savedUser);
+        assertEquals(existingUser.getPassword(), savedUser.getPassword());
+        Mockito.verify(userRepository).save(user);
+        Mockito.verify(userRepository).findById(1);
+    }
 
-            User savedUser = userService.save(user);
+    @Test
+    public void testSetPasswordEncoder() {
+        User user = new User();
+        user.setPassword("testPassword");
 
-            assertNotNull(savedUser);
-            assertEquals(existingUser.getPassword(), savedUser.getPassword());
-            Mockito.verify(userRepository).save(user);
-            Mockito.verify(userRepository).findById(1);
-        }
+        String encodedPassword = "encodedPassword";
+        when(passwordEncoder.encode("testPassword")).thenReturn(encodedPassword);
+        userService.setPasswordEncoder(user);
 
-        @Test
-        public void testSetPasswordEncoder() {
-            User user = new User();
-            user.setPassword("testPassword");
+        verify(passwordEncoder, times(1)).encode("testPassword");
+        assertEquals(encodedPassword, user.getPassword());
+    }
 
-            String encodedPassword = "encodedPassword";
-            when(passwordEncoder.encode("testPassword")).thenReturn(encodedPassword);
-            userService.setPasswordEncoder(user);
+    @Test
+    public void testGetUserId() throws UserNotFoundException {
+        User user = new User();
+        user.setId(1);
+        Optional<User> optionalUser = Optional.of(user);
 
-            verify(passwordEncoder, times(1)).encode("testPassword");
-            assertEquals(encodedPassword, user.getPassword());
-        }
+        Mockito.when(userRepository.findById(Mockito.anyInt())).thenReturn(optionalUser);
+        User result = userService.getUserId(1);
+        assertEquals(user, result);
+    }
 
-        @Test
-        public void testGetUserId() throws UserNotFoundException {
-            User user = new User();
-            user.setId(1);
-            Optional<User> optionalUser = Optional.of(user);
+    @Test
+    void testGetUserIdThrowsUserNotFoundException() {
+        Integer id = 123;
+        when(userRepository.findById(id)).thenThrow(new NoSuchElementException());
 
-            Mockito.when(userRepository.findById(Mockito.anyInt())).thenReturn(optionalUser);
-            User result = userService.getUserId(1);
-            assertEquals(user, result);
-        }
-        @Test
-        void testGetUserIdThrowsUserNotFoundException() {
-            Integer id = 123;
-            when(userRepository.findById(id)).thenThrow(new NoSuchElementException());
+        assertThrows(UserNotFoundException.class, () -> userService.getUserId(id));
+    }
 
-            assertThrows(UserNotFoundException.class, () -> userService.getUserId(id));
-        }
+    @Test
+    public void testDeleteUser() throws UserNotFoundException {
+        User user = new User();
+        user.setId(1);
+        user.setUsername("John");
+        user.setPassword("password");
 
-        @Test
-        public void testDeleteUser() throws UserNotFoundException {
-            User user = new User();
-            user.setId(1);
-            user.setUsername("John");
-            user.setPassword("password");
+        when(userRepository.countById(1)).thenReturn(1);
+        userService.deleteUser(1);
+        verify(userRepository).deleteById(1);
+    }
 
-            when(userRepository.countById(1)).thenReturn(1);
-            userService.deleteUser(1);
-            verify(userRepository).deleteById(1);
-        }
-        @Test
-        void testDeleteUserWithInvalidId() {
-            Integer id = 1;
-            when(userRepository.countById(id)).thenReturn(null);
+    @Test
+    void testDeleteUserWithInvalidId() {
+        Integer id = 1;
+        when(userRepository.countById(id)).thenReturn(null);
 
-            assertThrows(UserNotFoundException.class, () -> userService.deleteUser(id));
-            verify(userRepository, times(1)).countById(id);
-            verifyNoMoreInteractions(userRepository);
-        }
+        assertThrows(UserNotFoundException.class, () -> userService.deleteUser(id));
+        verify(userRepository, times(1)).countById(id);
+        verifyNoMoreInteractions(userRepository);
+    }
 
-        @Test
-        void testDeleteUserNotFoundException() {
-            Integer id = 1;
-            Long nullCount = null;
-            doReturn(nullCount).when(userRepository).countById(id);
+    @Test
+    void testDeleteUserNotFoundException() {
+        Integer id = 1;
+        Long nullCount = null;
+        doReturn(nullCount).when(userRepository).countById(id);
 
-            assertThrows(UserNotFoundException.class, () -> userService.deleteUser(id));
-            verify(userRepository, times(1)).countById(id);
-            verify(userRepository, never()).deleteById(id);
-        }
+        assertThrows(UserNotFoundException.class, () -> userService.deleteUser(id));
+        verify(userRepository, times(1)).countById(id);
+        verify(userRepository, never()).deleteById(id);
+    }
 
-        @Test
-        public void testUpdateUserEnabledStatus() {
-            Integer userId = 1;
-            boolean enabled = true;
-            userService.updateUserEnabledStatus(userId, enabled);
+    @Test
+    public void testUpdateUserEnabledStatus() {
+        Integer userId = 1;
+        boolean enabled = true;
+        userService.updateUserEnabledStatus(userId, enabled);
 
-            verify(userRepository, times(1)).updateEnabledStatus(userId, enabled);
-        }
+        verify(userRepository, times(1)).updateEnabledStatus(userId, enabled);
+    }
 }

@@ -23,14 +23,14 @@ xmlns:sec=https://www.thymeleaf.org/thymeleaf-extras-springsecurity5>
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{records/statistics}">Statistics</a>
+                    <a class="nav-link" sec:authorize="hasAnyAuthority('Admin')" th:href="@{records/statistics}">Statistics</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 <div>
-    <h2>List of Project records</h2>
+    <h1 class="text-center text-primary">List of Project records</h1>
 </div>
 <div class="alert alert-success text-center" th:if="${message!=null}">
     [[${message}]]

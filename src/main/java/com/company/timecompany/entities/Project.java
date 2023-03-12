@@ -28,9 +28,9 @@ public class Project {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-    @PastOrPresent(message = "Date must be present")
+    @PastOrPresent(message = "Created date cannot be in the past")
     private Date startDate;
-    @FutureOrPresent(message = "Date must be present")
+    @FutureOrPresent(message = "Date must be in the future")
     private Date endDate;
 
     public Project() {

@@ -23,8 +23,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -72,9 +70,12 @@ public String listAllProjects(Model model, @RequestParam(value = "keyword",requi
     }
 
     @PostMapping("/projects/submit")
-    private ModelAndView saveProject(@Valid Project project, BindingResult bindingResult) {
+    private ModelAndView saveProject(Model model,@Valid Project project, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            System.out.println("error");
+            List<Customer> listCustomers = customerRepository.findAll();
+            List<User> listUsers = userService.listAllEmployees();
+            model.addAttribute("listCustomers", listCustomers);
+            model.addAttribute("listUsers", listUsers);
             return new ModelAndView("project/project-form");
         } else {
             System.out.println("save");
