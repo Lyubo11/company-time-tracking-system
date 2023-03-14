@@ -61,7 +61,7 @@ public class UserController {
             return new ModelAndView("user/user-form");
         } else {
             user.setCreatedAt(Date.valueOf(LocalDate.now()));
-            if (userService.isUsernameUnique(user.getUsername())) {
+            if (!userService.isUsernameUnique(user.getUsername(),user.getId())) {
                 bindingResult.rejectValue("username", "error.user", "Username already exists");
                 return new ModelAndView("user/user-form");
             }

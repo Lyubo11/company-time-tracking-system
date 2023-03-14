@@ -51,7 +51,7 @@ public class UserServiceTest {
         User user = new User();
         user.setUsername(username);
         when(userRepository.getUserByUsername(username)).thenReturn(user);
-        boolean result = userService.isUsernameUnique(username);
+        boolean result = userService.isUsernameUnique(username,user.getId());
         assertFalse(result);
     }
 

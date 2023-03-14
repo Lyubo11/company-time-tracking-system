@@ -40,16 +40,38 @@ public class UserService {
         return employees;
     }
 
-    public boolean isUsernameUnique(String username) {
+    //    public boolean isUsernameUnique( String username,Integer id) {
+//        User userByUsername = userRepository.getUserByUsername(username);
+//
+//        if (userByUsername == null) return true;
+//
+//        boolean isCreatingNew = (id == null);
+//
+//        if (isCreatingNew) {
+//            if (userByUsername != null) {
+//                return false;
+//            } else {
+//                if (userByUsername.getId() != null) {
+//                    return false;
+//                }
+//            }
+//        }
+//        return true;
+//    }
+    public boolean isUsernameUnique(String username, Integer id) {
         User userByUsername = userRepository.getUserByUsername(username);
-        if(userByUsername == null){
-            return false;
-        }else if(userByUsername.getUsername() !=null && userRepository.findAll().contains(userByUsername) && userByUsername.getId()==null){
-            return false;
-        } else{
-        return true;
+
+        if (userByUsername == null) {
+            return true;
         }
+
+        if (id != null && userByUsername.getId().equals(id)) {
+            return true;
+        }
+
+        return false;
     }
+
 
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
