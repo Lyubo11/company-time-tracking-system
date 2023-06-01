@@ -1,5 +1,9 @@
 package com.company.timecompany.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Size;
@@ -8,7 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name= "customers")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "customers")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,67 +30,4 @@ public class Customer {
 
     @FutureOrPresent(message = "Date must be in the future")
     private Date contractExpiration;
-
-    public Customer() {
-    }
-
-    public Customer(Integer id, String name, List<Project> projects, String country, Date contractExpiration) {
-        this.id = id;
-        this.name = name;
-        this.projects = projects;
-        this.country = country;
-        this.contractExpiration = contractExpiration;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
-    }
-
-    public Date getContractExpiration() {
-        return contractExpiration;
-    }
-
-    public void setContractExpiration(Date contractExpiration) {
-        this.contractExpiration = contractExpiration;
-    }
-
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", projects=" + projects +
-                ", country='" + country + '\'' +
-                ", contractExpiration=" + contractExpiration +
-                '}';
-    }
 }

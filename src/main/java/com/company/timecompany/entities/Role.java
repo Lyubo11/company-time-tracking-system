@@ -1,9 +1,15 @@
 package com.company.timecompany.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -17,40 +23,5 @@ public class Role {
     @NotBlank(message = "Description is required")
     @Column(nullable = false)
     private String description;
-    public Role() {
-    }
-
-    public Role(String description) {
-        this.description = description;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public String toString() {
-        return this.name;
-    }
 
 }

@@ -1,5 +1,9 @@
 package com.company.timecompany.entities;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PastOrPresent;
@@ -10,6 +14,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
@@ -38,9 +45,6 @@ public class User {
 
     private boolean enabled;
 
-    public User() {
-    }
-
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -56,105 +60,13 @@ public class User {
         this.username = username;
     }
 
-    public User(String username, String password, String firstName, String lastName) {
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public List<Project> getProjects() {
-        return projects;
-    }
-
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public void addRole(Role role) {
-        roles.add(role);
-    }
-
-public boolean isAdmin() {
-    for (Role role : getRoles()) {
-        if (role.getName().equalsIgnoreCase("admin")) {
-            return true;
+    public boolean isAdmin() {
+        for (Role role : getRoles()) {
+            if (role.getName().equalsIgnoreCase("admin")) {
+                return true;
+            }
         }
-    }
 
-    return false;
-}
-    @Override
-    public String toString() {
-        return "User{" +
-                "firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                ", roles=" + roles +
-                '}';
+        return false;
     }
 }
