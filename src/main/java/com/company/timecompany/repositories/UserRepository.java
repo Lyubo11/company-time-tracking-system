@@ -7,12 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
-    public Integer countById(Integer id);
+    Integer countById(Integer id);
 
     @Query("SELECT u FROM User u WHERE u.username =:username")
-    public User getUserByUsername(@Param("username") String username);
+    User getUserByUsername(@Param("username") String username);
 
     @Query("UPDATE User u SET u.enabled = ?2 WHERE u.id=?1")
     @Modifying
-    public void updateEnabledStatus(Integer id, boolean enabled);
+    void updateEnabledStatus(Integer id, boolean enabled);
+
+    User findByUsername(String username);
 }

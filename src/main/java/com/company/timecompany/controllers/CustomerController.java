@@ -13,22 +13,23 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
+
 @Controller
 public class CustomerController {
 
     @Autowired
     private CustomerRepository customerRepository;
+    final List<Customer> listCustomers = customerRepository.findAll();
 
     @GetMapping("/customers")
     public String listAllCustomers(Model model) {
-        List<Customer> listCustomers = customerRepository.findAll();
         model.addAttribute("listCustomers", listCustomers);
         return "/customer/customers";
     }
 
     @GetMapping("/customers/new")
-    private String createNewProduct(Customer customer, Model model) {
-        List<Customer> listCustomers = customerRepository.findAll();
+    public String createNewProduct(Customer customer, Model model) {
         model.addAttribute("customer", customer);
         model.addAttribute("listCustomers", listCustomers);
         model.addAttribute("pageTitle", "Create New Customer");
@@ -36,21 +37,18 @@ public class CustomerController {
     }
 
     @PostMapping("/customers/submit")
-    private ModelAndView saveProduct(@Valid Customer customer, BindingResult bindingResult) {
+    public ModelAndView saveProduct(@Valid Customer customer, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            System.out.println("error");
             return new ModelAndView("customer/customer-form");
         } else {
-            System.out.println("save");
             customerRepository.save(customer);
             return new ModelAndView("redirect:/customers");
         }
     }
 
     @GetMapping("/customers/edit/{id}")
-    private String editProduct(@PathVariable("id") Integer id, Model model) {
-        Customer customer = customerRepository.findById(id).get();
-        List<Customer> listCustomers = customerRepository.findAll();
+    public String editProduct(@PathVariable("id") Integer id, Model model) {
+        Optional<Customer> customer = customerRepository.findById(id);
         model.addAttribute("customer", customer);
         model.addAttribute("listCustomers", listCustomers);
         model.addAttribute("pageTitle", "Edit Customer (ID: " + id + ")");
@@ -58,7 +56,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customers/delete/{id}")
-    private ModelAndView deleteProduct(@PathVariable("id") Integer id, Model model) {
+    public ModelAndView deleteProduct(@PathVariable("id") Integer id, Model model) {
         customerRepository.deleteById(id);
         return new ModelAndView("redirect:/customers");
     }

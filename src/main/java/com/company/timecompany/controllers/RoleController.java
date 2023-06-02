@@ -2,7 +2,7 @@ package com.company.timecompany.controllers;
 
 import com.company.timecompany.entities.Role;
 import com.company.timecompany.repositories.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,20 +15,20 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
 public class RoleController {
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     @GetMapping("/roles")
-    private String listAllRoles(Model model) {
+    public String listAllRoles(Model model) {
         List<Role> listRoles = roleRepository.findAll();
         model.addAttribute("listRoles", listRoles);
         return "role/roles";
     }
 
     @GetMapping("/roles/new")
-    private String createNewRole(Role role, Model model) {
+    public String createNewRole(Role role, Model model) {
         List<Role> listRoles = roleRepository.findAll();
         model.addAttribute("role", role);
         model.addAttribute("listRoles", listRoles);
@@ -37,7 +37,7 @@ public class RoleController {
     }
 
     @PostMapping("/roles/submit")
-    private ModelAndView saveRole(@Valid Role role, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public ModelAndView saveRole(@Valid Role role, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("role/role-form");
         } else {
@@ -49,7 +49,7 @@ public class RoleController {
     }
 
     @GetMapping("/roles/edit/{id}")
-    private String editRole(@PathVariable("id") Integer id, Model model) {
+    public String editRole(@PathVariable("id") Integer id, Model model) {
         Role role = roleRepository.findById(id).get();
         List<Role> listRoles = roleRepository.findAll();
         model.addAttribute("role", role);
@@ -59,7 +59,7 @@ public class RoleController {
     }
 
     @GetMapping("/roles/delete/{id}")
-    private ModelAndView deleteProduct(@PathVariable("id") Integer id, Model model) {
+    public ModelAndView deleteProduct(@PathVariable("id") Integer id, Model model) {
         roleRepository.deleteById(id);
         return new ModelAndView("redirect:/roles");
     }

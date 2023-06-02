@@ -3,21 +3,20 @@ package com.company.timecompany.services;
 import com.company.timecompany.entities.Project;
 import com.company.timecompany.entities.User;
 import com.company.timecompany.repositories.ProjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class ProjectService {
 
-    @Autowired
-    private ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     public List<Project> findAllByCurrentUser() {
         User currentUser = userService.getCurrentUser();
@@ -27,6 +26,7 @@ public class ProjectService {
             return projectRepository.findByUser(currentUser);
         }
     }
+
     public Project getProjectById(Integer id) {
         Optional<Project> projectOptional = projectRepository.findById(id);
         if (projectOptional.isPresent()) {

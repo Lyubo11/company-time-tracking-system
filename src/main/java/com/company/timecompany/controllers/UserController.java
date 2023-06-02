@@ -7,7 +7,7 @@ import com.company.timecompany.repositories.ProjectRepository;
 import com.company.timecompany.repositories.RoleRepository;
 import com.company.timecompany.repositories.UserRepository;
 import com.company.timecompany.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,18 +22,14 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Controller
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private ProjectRepository projectRepository;
-    @Autowired
-    private RoleRepository roleRepository;
+    private final UserService userService;
+    private final UserRepository userRepository;
+    private final ProjectRepository projectRepository;
+    private final RoleRepository roleRepository;
 
     @GetMapping("/users")
     public String listAll(Model model) {
@@ -52,7 +48,7 @@ public class UserController {
         return "/user/user-form";
     }
 
-        @PostMapping("/users/submit")
+    @PostMapping("/users/submit")
     public ModelAndView saveUser(@Valid User user, Model model, BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
@@ -61,7 +57,7 @@ public class UserController {
             return new ModelAndView("user/user-form");
         } else {
             user.setCreatedAt(Date.valueOf(LocalDate.now()));
-            if (!userService.isUsernameUnique(user.getUsername(),user.getId())) {
+            if (!userService.isUsernameUnique(user.getUsername(), user.getId())) {
                 bindingResult.rejectValue("username", "error.user", "Username already exists");
                 return new ModelAndView("user/user-form");
             }

@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
 
     @GetMapping("")
-    private String viewHomePage(){
+    private String viewHomePage() {
         return "index";
     }
 
     @GetMapping("/login")
-    private String viewLoginPage(){
+    private String viewLoginPage() {
         return "/login";
     }
 }

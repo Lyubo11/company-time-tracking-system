@@ -18,12 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class UserServiceTest {
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
-
+class UserServiceTest {
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -31,6 +26,10 @@ public class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     void testListAllUsers() {
@@ -45,18 +44,26 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testIsUsernameUnique() {
+    void testIsUsernameUnique() {
+        User user = User.builder().id(1).username("john.doe").build();
 
-        String username = "testuser";
-        User user = new User();
-        user.setUsername(username);
-        when(userRepository.getUserByUsername(username)).thenReturn(user);
-        boolean result = userService.isUsernameUnique(username,user.getId());
-        assertFalse(result);
+        when(userRepository.getUserByUsername("john.doe")).thenReturn(user);
+
+        boolean isUnique = userService.isUsernameUnique("jane.smith", 2);
+        assertTrue(isUnique);
+
+        isUnique = userService.isUsernameUnique("john.doe", 1);
+        assertTrue(isUnique);
+
+        isUnique = userService.isUsernameUnique("john.doe", 2);
+        assertFalse(isUnique);
+
+        verify(userRepository, times(3)).getUserByUsername(anyString());
     }
 
+
     @Test
-    public void testGetAllEmployeesLIst() {
+    void testGetAllEmployeesLIst() {
 
         Role employeeRole = mock(Role.class);
         Mockito.when(employeeRole.getName()).thenReturn("Employee");
@@ -77,7 +84,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testSaveUser() {
+    void testSaveUser() {
 
         User user = new User();
         user.setId(1);
@@ -105,7 +112,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testSetPasswordEncoder() {
+    void testSetPasswordEncoder() {
         User user = new User();
         user.setPassword("testPassword");
 
@@ -118,26 +125,31 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetUserId() throws UserNotFoundException {
+    void testGetUserId() throws UserNotFoundException {
         User user = new User();
         user.setId(1);
-        Optional<User> optionalUser = Optional.of(user);
 
-        Mockito.when(userRepository.findById(Mockito.anyInt())).thenReturn(optionalUser);
+        when(userRepository.findById(1)).thenReturn(Optional.of(user));
+
         User result = userService.getUserId(1);
+
         assertEquals(user, result);
+
+        verify(userRepository).findById(1);
     }
 
     @Test
     void testGetUserIdThrowsUserNotFoundException() {
-        Integer id = 123;
-        when(userRepository.findById(id)).thenThrow(new NoSuchElementException());
 
-        assertThrows(UserNotFoundException.class, () -> userService.getUserId(id));
+        when(userRepository.findById(1)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, () -> userService.getUserId(1));
+
+        verify(userRepository).findById(1);
     }
 
     @Test
-    public void testDeleteUser() throws UserNotFoundException {
+    void testDeleteUser() throws UserNotFoundException {
         User user = new User();
         user.setId(1);
         user.setUsername("John");
@@ -161,8 +173,7 @@ public class UserServiceTest {
     @Test
     void testDeleteUserNotFoundException() {
         Integer id = 1;
-        Long nullCount = null;
-        doReturn(nullCount).when(userRepository).countById(id);
+        doReturn(null).when(userRepository).countById(id);
 
         assertThrows(UserNotFoundException.class, () -> userService.deleteUser(id));
         verify(userRepository, times(1)).countById(id);
@@ -170,7 +181,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testUpdateUserEnabledStatus() {
+    void testUpdateUserEnabledStatus() {
         Integer userId = 1;
         boolean enabled = true;
         userService.updateUserEnabledStatus(userId, enabled);

@@ -4,7 +4,7 @@ import com.company.timecompany.entities.Role;
 import com.company.timecompany.entities.User;
 import com.company.timecompany.exceptions.UserNotFoundException;
 import com.company.timecompany.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,19 +13,19 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class UserService {
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepository;
 
     public List<User> listAllUsers() {
-        return (List<User>) userRepository.findAll();
+        return userRepository.findAll();
     }
 
     public List<User> listAllEmployees() {
@@ -40,24 +40,6 @@ public class UserService {
         return employees;
     }
 
-    //    public boolean isUsernameUnique( String username,Integer id) {
-//        User userByUsername = userRepository.getUserByUsername(username);
-//
-//        if (userByUsername == null) return true;
-//
-//        boolean isCreatingNew = (id == null);
-//
-//        if (isCreatingNew) {
-//            if (userByUsername != null) {
-//                return false;
-//            } else {
-//                if (userByUsername.getId() != null) {
-//                    return false;
-//                }
-//            }
-//        }
-//        return true;
-//    }
     public boolean isUsernameUnique(String username, Integer id) {
         User userByUsername = userRepository.getUserByUsername(username);
 
@@ -65,11 +47,7 @@ public class UserService {
             return true;
         }
 
-        if (id != null && userByUsername.getId().equals(id)) {
-            return true;
-        }
-
-        return false;
+        return userByUsername.getId().equals(id);
     }
 
 
@@ -83,18 +61,13 @@ public class UserService {
         boolean isUpdatingUser = (user.getId() != null);
 
         if (isUpdatingUser) {
-            User existingUser = userRepository.findById(user.getId()).get();
-            if (user.getPassword().isEmpty()) {
-                user.setPassword(existingUser.getPassword());
+            Optional<User> existingUser = userRepository.findById(user.getId());
+            if (user.getPassword().isEmpty() && existingUser.isPresent()) {
+                user.setPassword(existingUser.get().getPassword());
             }
         }
-        encodePassword(user);
+        setPasswordEncoder(user);
         return userRepository.save(user);
-    }
-
-    private void encodePassword(User user) {
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
     }
 
     void setPasswordEncoder(User user) {
@@ -103,11 +76,8 @@ public class UserService {
     }
 
     public User getUserId(Integer id) throws UserNotFoundException {
-        try {
-            return userRepository.findById(id).get();
-        } catch (NoSuchElementException ex) {
-            throw new UserNotFoundException("Could not find any user wid ID: " + id);
-        }
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Could not find any user with ID: " + id));
     }
 
     public void deleteUser(Integer id) throws UserNotFoundException {

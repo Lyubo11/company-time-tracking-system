@@ -1,6 +1,9 @@
 package com.company.timecompany.configs;
 
+import com.company.timecompany.repositories.UserRepository;
 import com.company.timecompany.services.authorization.MyUserDetailsService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,19 +15,21 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+    private final UserRepository userRepo;
     @Bean
-    public UserDetailsService userDetailsService(){
-        return new MyUserDetailsService();
+    public UserDetailsService userDetailsService() {
+        return new MyUserDetailsService(userRepo);
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -32,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
@@ -41,8 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .mvcMatchers("/login").permitAll()
-                .antMatchers("/users/**","/customers/**","/roles/**","/projects/new/**").hasAuthority("Admin")
-                .antMatchers("/records","/records/new","/projects").hasAnyAuthority("Admin","Employee")
+                .antMatchers("/users/**", "/customers/**", "/roles/**", "/projects/new/**").hasAuthority("Admin")
+                .antMatchers("/records", "/records/new", "/projects").hasAnyAuthority("Admin", "Employee")
                 .antMatchers("/records/statistics").hasAuthority("Admin")
                 .anyRequest().authenticated()
                 .and()
@@ -54,6 +60,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/images/**","/js/**","/css/**","/webjars/**");
+        web.ignoring().antMatchers("/images/**", "/js/**", "/css/**", "/webjars/**");
     }
 }

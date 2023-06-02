@@ -1,6 +1,7 @@
 package com.company.timecompany.entities;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "users")
 public class User {
     @Id
@@ -58,6 +60,13 @@ public class User {
 
     public User(String username) {
         this.username = username;
+    }
+
+    public User(String user, String s, String ivan, String ivanov) {
+        this.username = user;
+        this.password = s;
+        this.firstName = ivan;
+        this.lastName = ivanov;
     }
 
     public boolean isAdmin() {

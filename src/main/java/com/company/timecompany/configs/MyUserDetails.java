@@ -12,17 +12,19 @@ import java.util.List;
 import java.util.Set;
 
 public class MyUserDetails implements UserDetails {
-    private User user;
-    public  MyUserDetails(User user) {
-        this.user=user;
+    private final transient User user;
+
+    public MyUserDetails(User user) {
+        this.user = user;
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<Role> roles = user.getRoles();
-        List<SimpleGrantedAuthority>authories = new ArrayList<>();
+        List<SimpleGrantedAuthority> authories = new ArrayList<>();
 
-        for (Role role  : roles) {
-          authories.add(new SimpleGrantedAuthority(role.getName()));
+        for (Role role : roles) {
+            authories.add(new SimpleGrantedAuthority(role.getName()));
         }
         return authories;
     }
@@ -57,7 +59,7 @@ public class MyUserDetails implements UserDetails {
         return user.isEnabled();
     }
 
-    public String getFullName(){
+    public String getFullName() {
         return this.user.getFirstName() + " " + user.getLastName();
     }
 
