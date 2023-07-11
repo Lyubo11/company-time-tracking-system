@@ -3,10 +3,12 @@ package com.company.timecompany.controllers;
 import com.company.timecompany.entities.Role;
 import com.company.timecompany.entities.User;
 import com.company.timecompany.exceptions.UserNotFoundException;
-import com.company.timecompany.repositories.ProjectRepository;
 import com.company.timecompany.repositories.RoleRepository;
-import com.company.timecompany.repositories.UserRepository;
 import com.company.timecompany.services.UserService;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.List;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,18 +19,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.List;
-
 @RequiredArgsConstructor
 @Controller
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
-    private final ProjectRepository projectRepository;
     private final RoleRepository roleRepository;
 
     @GetMapping("/users")
@@ -85,7 +80,7 @@ public class UserController {
     }
 
     @GetMapping("/users/delete/{id}")
-    public String deleteUser(@PathVariable(name = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+    public String deleteUser(@PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
         try {
             userService.deleteUser(id);
             redirectAttributes.addFlashAttribute("message", "The user ID:" + id + " has been deleted successfully");
