@@ -1,6 +1,7 @@
 package com.company.timecompany.entities;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,7 +11,7 @@ import javax.validation.constraints.Size;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-
+@Builder
 @Entity
 @Data
 @NoArgsConstructor
