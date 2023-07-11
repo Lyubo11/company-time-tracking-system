@@ -3,7 +3,6 @@ package com.company.timecompany.controllers;
 import com.company.timecompany.entities.Customer;
 import com.company.timecompany.repositories.CustomerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,7 +28,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customers/new")
-    public String createNewProduct(Customer customer, Model model) {
+    public String createNewCustomer(Customer customer, Model model) {
         List<Customer> listCustomers = customerRepository.findAll();
         model.addAttribute("customer", customer);
         model.addAttribute("listCustomers", listCustomers);
@@ -38,7 +37,7 @@ public class CustomerController {
     }
 
     @PostMapping("/customers/submit")
-    public ModelAndView saveProduct(@Valid Customer customer, BindingResult bindingResult) {
+    public ModelAndView saveCustomer(@Valid Customer customer, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("customer/customer-form");
         } else {
@@ -48,7 +47,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customers/edit/{id}")
-    public String editProduct(@PathVariable("id") Integer id, Model model) {
+    public String editCustomer(@PathVariable("id") Integer id, Model model) {
         Optional<Customer> customer = customerRepository.findById(id);
         List<Customer> listCustomers = customerRepository.findAll();
         model.addAttribute("customer", customer);
@@ -58,7 +57,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customers/delete/{id}")
-    public ModelAndView deleteProduct(@PathVariable("id") Integer id, Model model) {
+    public ModelAndView deleteCustomer(@PathVariable("id") Integer id, Model model) {
         customerRepository.deleteById(id);
         return new ModelAndView("redirect:/customers");
     }

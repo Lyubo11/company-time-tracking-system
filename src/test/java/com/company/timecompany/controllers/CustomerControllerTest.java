@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Incubating;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -37,19 +36,19 @@ class CustomerControllerTest {
         Model model = mock(Model.class);
         String expected = customerController.listAllCustomers(model);
 
-        assertEquals("/customer/customers",expected);
+        assertEquals(expected,"/customer/customers");
     }
 
     @Test
-    void testShouldCreateNewProduct() {
+    void testShouldCreateNewCustomer() {
         Customer customer =Customer.builder().id(1).name("ivan").build();
         List<Customer> customers = List.of(customer);
         Model model = mock(Model.class);
 
          when(customerRepository.findAll()).thenReturn(customers);
-        String expected = customerController.createNewProduct(customer,model);
+        String expected = customerController.createNewCustomer(customer, model);
 
-        assertEquals("customer/customer-form",expected);
+        assertEquals(expected,"customer/customer-form");
     }
 
     @Test
@@ -60,25 +59,25 @@ class CustomerControllerTest {
         when(bindingResult.hasErrors()).thenReturn(false);
         when(customerRepository.save(any(Customer.class))).thenReturn(customer);
 
-        ModelAndView expected = customerController.saveProduct(customer,bindingResult);
+        ModelAndView expected = customerController.saveCustomer(customer, bindingResult);
 
-        assertEquals("redirect:/customers",expected.getViewName());
+        assertEquals(expected.getViewName(),"redirect:/customers");
 
     }
     @Test
-    void testShouldSaveNewCustomerWhenHasError() {
+    void testShouldNotSaveNewCustomerWhenHasError() {
         Customer customer = Customer.builder().id(1).name("ivan").build();
         BindingResult bindingResult = mock(BindingResult.class);
 
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        ModelAndView expected = customerController.saveProduct(customer,bindingResult);
+        ModelAndView expected = customerController.saveCustomer(customer, bindingResult);
 
-        assertEquals("customer/customer-form",expected.getViewName());
+        assertEquals(expected.getViewName(),"customer/customer-form");
     }
 
     @Test
-    void testShouldEditCustomer() {
+    void testShouldEditProduct() {
         int id = 1;
         Optional<Customer> customer = Optional.ofNullable((Customer.builder().id(id).build()));
         List<Customer> customers = List.of(Customer.builder().id(2).build());
@@ -87,9 +86,22 @@ class CustomerControllerTest {
         when(customerRepository.findById(id)).thenReturn(customer);
         when(customerRepository.findAll()).thenReturn(customers);
 
-        String expected = customerController.editProduct(id,model);
+        String expected = customerController.editCustomer(id, model);
 
-        assertEquals("customer/customer-form",expected);
+        assertEquals(expected,"customer/customer-form");
+    }
+
+    @Test
+    void testShouldDeleteProduct() {
+        int id = 1;
+        Model model = mock(Model.class);
+
+        ModelAndView modelAndView = customerController.deleteCustomer(1, model);
+        assert(modelAndView.getViewName().equals("redirect:/customers"));
+
+
+
+
 
     }
 }
